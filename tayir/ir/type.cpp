@@ -102,6 +102,7 @@ namespace tayir {
     Type::~Type() {
         if (name != NULL) {
             delete[] name;
+            name = NULL;
         }
     }
 
@@ -130,5 +131,61 @@ namespace tayir {
      */
     const bool Type::IsArray() {
         return isArray;
+    }
+    
+//---------------------------------------------------------
+//|                                                       |
+//|                  complex types                        |
+//|                                                       |
+//---------------------------------------------------------
+
+    /**
+     * @brief Complex Type构造函数
+     * 
+     * @param typeList 类型列表
+     * @param size 类型大小
+     * @param name 类型名
+     * @param isArray 是否为数组
+     */
+    ComplexType::ComplexType(std::vector<int> typeList, int size, char *name, bool isArray) 
+        : Type(size, name, isArray), types(new int[typeList.size()]), typeNum(typeList.size())
+    {
+        for (int i = 0 ; i < typeNum ; i ++) {
+            types[i] = typeList.at(i);
+        }
+    }
+
+    /**
+     * @brief Complex Type析构函数
+     * 
+     */
+    ComplexType::~ComplexType() {
+        if (types != NULL) {
+            delete[] types;
+            types = NULL;
+        }
+    }
+
+    /**
+     * @brief 获取Type Num
+     * 
+     * @return 类型数
+     */
+    const int ComplexType::GetTypeNum() {
+        return typeNum;
+    }
+
+    /**
+     * @brief 获取Member Type Id
+     * 
+     * @param sub 下标 
+     * @return 成员类型
+     */
+    const int ComplexType::GetMemberTypeId(int sub) {
+        if (sub < 0 || sub >= typeNum) {
+            //TODO: throw exception
+            return -1;
+        }
+        return types[sub];
     }
 }

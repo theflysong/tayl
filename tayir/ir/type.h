@@ -88,6 +88,7 @@ namespace tayir {
          * @brief Type构造函数
          * 
          * @param prototype 类型原型
+         * @param isArray 是否为数组
          */
         Type(PrimTypePrototype prototype, bool isArray);
         /**
@@ -95,6 +96,7 @@ namespace tayir {
          * 
          * @param size 类型大小
          * @param name 类型名
+         * @param isArray 是否为数组
          */
         Type(int size, char *name, bool isArray);
         /**
@@ -130,18 +132,29 @@ namespace tayir {
     protected:
         /** 类型列表 */
         int *types;
+        /** 类型数 */
+        int typeNum;
         /**
          * @brief Complex Type构造函数
          * 
          * @param typeList 类型列表
+         * @param size 类型大小
+         * @param name 类型名
+         * @param isArray 是否为数组
          */
-        ComplexType(std::vector<int> typeList);
+        ComplexType(std::vector<int> typeList, int size, char *name, bool isArray);
     public:
         /**
          * @brief Complex Type析构函数
          * 
          */
         virtual ~ComplexType();
+        /**
+         * @brief 获取Type Num
+         * 
+         * @return 类型数
+         */
+        const int GetTypeNum();
         /**
          * @brief 获取Member Type Id
          * 
@@ -171,20 +184,18 @@ namespace tayir {
          */
         ~ComplexTypeBuilder();
         /**
+         * @brief 获取Type Num
+         * 
+         * @return 类型数
+         */
+        int GetTypeNum();
+        /**
          * @brief 获取Member Type Id
          * 
          * @param sub 下标 
          * @return 成员类型ID
          */
-        const int GetMemberTypeId(int sub);
-        /**
-         * @brief 替换Type
-         * 
-         * @param sub 下标
-         * @param typeId 类型
-         * @return Builder
-         */
-        virtual ComplexTypeBuilder &ReplaceType(int sub, int typeId);
+        int &GetMemberTypeId(int sub);
         /**
          * @brief 追加Type
          * 

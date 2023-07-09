@@ -40,6 +40,7 @@ namespace tayir {
     RegisterTab::~RegisterTab() {
         if (userTab != NULL) {
             delete[] userTab;
+            userTab = NULL;
         }
     }
 
