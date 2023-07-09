@@ -1,0 +1,12 @@
+import std
+
+func @main(i32 %argc, p64 %argv) -> i32 {
+    // because we use scanf, so we use instruction stack to alloc space from stack
+    %a = stack i32
+    %b = stack i32
+    // special ssa value ^0 will ignore the returning value
+    %^0 = call %scanf, ["%d%d", %a, %b]
+    %c = add %a, %b
+    %^0 = call %printf, ["%d", %a]
+    ret 0
+}

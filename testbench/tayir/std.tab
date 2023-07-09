@@ -1,0 +1,9 @@
+{
+    @convention = cdelc_x64
+}
+func @scanf(p64 %fmt, ...) -> i32;
+
+{
+    @convention = cdelc_x64
+}
+func @printf(p64 %fmt, ...) -> i32;
