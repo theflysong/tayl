@@ -12,6 +12,8 @@
 
 #pragma once
 
+#include <string>
+
 namespace tayir {
     /**
      * @enum tayir::OperandType
@@ -58,20 +60,8 @@ namespace tayir {
         /** 操作数位置 */
         const OperandPos pos;
         /** 操作数值*/
-        char *value;
+        std::string value;
     public:
-        /**
-         * @brief Operand构造函数
-         * 
-         * @param op 操作数左值
-         */
-        Operand(Operand &op);
-        /**
-         * @brief Operand构造函数
-         * 
-         * @param op 操作数右值
-         */
-        Operand(Operand &&op);
         /**
          * @brief Operand构造函数
          * 
@@ -79,12 +69,7 @@ namespace tayir {
          * @param pos 操作数位置
          * @param value 操作数值
          */
-        Operand(const OperandType type, const OperandPos pos, const char *value);
-        /**
-         * @brief Operand析构函数
-         * 
-         */
-        ~Operand();
+        Operand(const OperandType type, const OperandPos pos, std::string value);
         /**
          * @brief 获取Operand Type
          * 
@@ -102,6 +87,6 @@ namespace tayir {
          * 
          * @return Operand Value
          */
-        const char *GetOperandValue();
+        std::string GetOperandValue();
     };
 }

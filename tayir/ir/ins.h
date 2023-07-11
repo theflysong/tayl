@@ -70,7 +70,7 @@ namespace tayir {
          * @param src1Op 操作数1
          * @param src2Op 操作数2
          */
-        Ins(const InsType type, Operand&& destOp, Operand&& src1Op, Operand&& src2Op);
+        Ins(const InsType type, Operand destOp, Operand src1Op, Operand src2Op);
         /**
          * @brief Ins析构函数
          * 

@@ -17,59 +17,15 @@ namespace tayir {
     /**
      * @brief Operand构造函数
      * 
-     * @param op 操作数左值
-     */
-    Operand::Operand(Operand &op) 
-        : type(op.type), pos(op.pos)
-    {
-        if (op.type == OperandType::EMPTY) {
-            this->value = NULL;
-            return;
-        }
-
-        this->value = new char[strlen(op.value) + 1];
-        strcpy(this->value, op.value);
-    }
-
-    /**
-     * @brief Operand构造函数
-     * 
-     * @param op 操作数右值
-     */
-    Operand::Operand(Operand &&op)
-        : type(op.type), pos(op.pos)
-    {
-        this->value = op.value;
-        op.value = NULL;
-    }   
-
-    /**
-     * @brief Operand构造函数
-     * 
      * @param type 操作数类型
      * @param pos 操作数位置
      * @param value 操作数值
      */
-    Operand::Operand(const OperandType type, const OperandPos pos, const char *value) 
-        : type(type), pos(pos)
+    Operand::Operand(const OperandType type, const OperandPos pos, std::string value) 
+        : type(type), pos(pos), value(value)
     {
         if (type == OperandType::EMPTY) {
-            this->value = NULL;
-            return;
-        }
-
-        this->value = new char[strlen(value) + 1];
-        strcpy(this->value, value);
-    }
-
-    /**
-     * @brief Operand析构函数
-     * 
-     */
-    Operand::~Operand() {
-        if (value != NULL) {
-            delete[] value;
-            value = NULL;
+            this->value = "";
         }
     }
 
@@ -96,7 +52,7 @@ namespace tayir {
      * 
      * @return Operand Value
      */
-    const char *Operand::GetOperandValue() {
+    std::string Operand::GetOperandValue() {
         return value;
     }
 }

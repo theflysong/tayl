@@ -50,7 +50,7 @@ namespace tayir {
      * @param regno 寄存器编号
      * @return 寄存器名
      */
-    const char *RegisterTab::getRegName(int regno) {
+    const char *RegisterTab::getRegName(int regno) const {
         if (regno >= regNum || regno < 0) {
             // TODO: throw exception
             return 0;
@@ -64,7 +64,7 @@ namespace tayir {
      * @param regName 寄存器名
      * @return 寄存器编号
      */
-    int RegisterTab::getRegno(const char *regName) {
+    const int RegisterTab::getRegno(const char *regName) const {
         for (int i = 0 ; i < regNum ; i ++) {
             if (strcmp(regName, nameTab[i]) == 0) {
                 return i;
@@ -79,7 +79,7 @@ namespace tayir {
      * @param regno 寄存器编号
      * @return 寄存器使用者
      */
-    int RegisterTab::getRegUser(int regno) {
+    const int RegisterTab::getRegUser(int regno) const {
         if (regno >= regNum || regno < 0) {
             // TODO: throw exception
             return false;

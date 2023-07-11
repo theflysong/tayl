@@ -47,21 +47,21 @@ namespace tayir {
          * @param regno 寄存器编号
          * @return 寄存器名
          */
-        const char *getRegName(int regno);
+        const char *getRegName(int regno) const;
         /** 
          * @brief 获取Reg No
          * 
          * @param regName 寄存器名
          * @return 寄存器编号
          */
-        int getRegno(const char *regName);
+        const int getRegno(const char *regName) const;
         /**
          * @brief 获取寄存器使用者
          * 
          * @param regno 寄存器编号
          * @return 寄存器使用者
          */
-        int getRegUser(int regno);
+        const int getRegUser(int regno) const;
         /**
          * @brief 设置Reg为Busy
          * 

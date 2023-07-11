@@ -23,7 +23,7 @@ namespace tayir {
      * @param src1Op 操作数1
      * @param src2Op 操作数2
      */
-    Ins::Ins(const InsType type, Operand&& destOp, Operand&& src1Op, Operand&& src2Op) 
+    Ins::Ins(const InsType type, Operand destOp, Operand src1Op, Operand src2Op) 
         : type(type), destOp(destOp), src1Op(src1Op), src2Op(src2Op)
     {
     }

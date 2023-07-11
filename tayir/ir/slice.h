@@ -29,14 +29,14 @@ namespace tayir {
          * 
          * @return 指令数量
          */
-        virtual const int GetInsNum() = 0;
+        virtual const int GetInsNum() const = 0;
         /**
          * @brief 获取Ins
          * 
          * @param sub 下标
          * @return 指令
          */
-        virtual const Ins *GetIns(int sub) = 0;
+        virtual const Ins *GetIns(int sub) const = 0;
     };
 
     /**
@@ -64,14 +64,14 @@ namespace tayir {
          * 
          * @return 指令数量
          */
-        virtual const int GetInsNum() override;
+        virtual const int GetInsNum() const override;
         /**
          * @brief 获取Ins
          * 
          * @param sub 下标
          * @return 指令
          */
-        virtual const Ins *GetIns(int sub) override;
+        virtual const Ins *GetIns(int sub) const override;
         friend class IRFragmentBuilder;
     };
 
@@ -99,7 +99,7 @@ namespace tayir {
          * 
          * @return 指令数量
          */
-        int GetInsNum();
+        const int GetInsNum() const;
         /**
          * @brief 获取Ins
          * 
@@ -127,7 +127,7 @@ namespace tayir {
          * 
          * @return IRFragment
          */
-        IRFragment *build();
+        IRFragment *Build();
     };
 
     /**
@@ -139,7 +139,7 @@ namespace tayir {
         /** 类型Id */
         const int typeId;
         /** 名称 */
-        char *name;
+        std::string name;
     public:
         /**
          * @brief Argument构造函数
@@ -147,7 +147,7 @@ namespace tayir {
          * @param typeId 类型Id
          * @param name 名称
          */
-        Argument(const int typeId, const char *name);
+        Argument(const int typeId, std::string name);
         /**
          * @brief Argument析构函数
          * 
@@ -158,13 +158,13 @@ namespace tayir {
          * 
          * @return 类型Id
          */
-        const int GetTypeId();
+        const int GetTypeId() const;
         /**
          * @brief 获取Name
          * 
          * @return 名称
          */
-        const char *GetName();
+        std::string GetName() const;
     };
 
     /**
@@ -207,14 +207,14 @@ namespace tayir {
          * 
          * @return 指令数量
          */
-        virtual const int GetInsNum() override;
+        virtual const int GetInsNum() const override;
         /**
          * @brief 获取Ins
          * 
          * @param sub 下标
          * @return 指令
          */
-        virtual const Ins *GetIns(int sub) override;
+        virtual const Ins *GetIns(int sub) const override;
         /**
          * @brief 获取Arg
          * 
@@ -263,7 +263,7 @@ namespace tayir {
          * 
          * @return 指令数量
          */
-        virtual int GetInsNum();
+        virtual int GetInsNum() const;
         /**
          * @brief 获取Ins
          * 
@@ -314,7 +314,7 @@ namespace tayir {
          * @param offset 偏移
          * @return IR基本块
          */
-        virtual IRBasicBlock *build(int offset);
+        virtual IRBasicBlock *Build(int offset);
     };
 
     /**
