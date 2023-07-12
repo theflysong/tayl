@@ -12,16 +12,16 @@ int main(int argc, const char **argv) {
 
 */
 
-func @main(i32 %argc, p64 %argv) -> i32 {
+def @main(i32 %argc, p64 %argv) -> i32 {
 start:
     // because we use scanf, so we use instruction `alloc` to alloc space from stack
     %a$ptr = alloc i32
     %b$ptr = alloc i32
-    %useless$0 = call %scanf, ["%d%d", %a, %b]
+    call @scanf, ["%d%d", %a, %b]
     %a$val = load %a$ptr
     %b$val = load %b$ptr
     %temp$0 = mul %b$val, 2
     %c = add %a, %temp$0
-    %useless$1 = call %printf, ["%d\n", %c]
+    call @printf, ["%d\n", %c]
     ret 0
 }

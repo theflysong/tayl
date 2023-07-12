@@ -5,6 +5,16 @@
 void test2() {
     using namespace tayir;
     TypeManager man;
+    ArgOpPool pool;
+    int arg0Id = pool.AppendArg({
+        Operand(OperandType::CONSTANT, OperandPos::DEST, "\"%d%d\""),
+        Operand(OperandType::SSA_VALUE, OperandPos::DEST, "%a"),
+        Operand(OperandType::SSA_VALUE, OperandPos::DEST, "%b")
+    });
+    int arg1Id = pool.AppendArg({
+        Operand(OperandType::CONSTANT, OperandPos::DEST, "\"%d\\n\""),
+        Operand(OperandType::SSA_VALUE, OperandPos::DEST, "%c")
+    });
 
     IRFunctionBuilder fnBuilder;
     fnBuilder.GetDecl().name = "main";
@@ -16,26 +26,76 @@ void test2() {
         IRBasicBlockBuilder()
             .AppendIns(
                 Ins(
-                    InsType::ADD,
-                    Operand(OperandType::SSA_VALUE, OperandPos::DEST, "%a"),
-                    Operand(OperandType::SSA_VALUE, OperandPos::SRC1, "%b"),
-                    Operand(OperandType::SSA_VALUE, OperandPos::SRC2, "%c")
+                    InsType::ALLOC,
+                    Operand(OperandType::SSA_VALUE, OperandPos::DEST, "%a$ptr"),
+                    Operand(OperandType::TYPE, OperandPos::SRC1, "i32"),
+                    Operand(OperandPos::SRC2)
                 )
             )
             .AppendIns(
                 Ins(
-                    InsType::SUB,
-                    Operand(OperandType::SSA_VALUE, OperandPos::DEST, "%d"),
+                    InsType::ALLOC,
+                    Operand(OperandType::SSA_VALUE, OperandPos::DEST, "%b$ptr"),
+                    Operand(OperandType::TYPE, OperandPos::SRC1, "i32"),
+                    Operand(OperandPos::SRC2)
+                )
+            )
+            .AppendIns(
+                Ins(
+                    InsType::CALL,
+                    Operand(OperandPos::DEST),
+                    Operand(OperandType::LABEL, OperandPos::SRC1, "@scanf"),
+                    Operand(OperandPos::SRC2),
+                    arg0Id
+                )
+            )
+            .AppendIns(
+                Ins(
+                    InsType::LOAD,
+                    Operand(OperandType::SSA_VALUE, OperandPos::DEST, "%a$val"),
+                    Operand(OperandType::SSA_VALUE, OperandPos::SRC1, "%a$ptr"),
+                    Operand(OperandPos::SRC2)
+                )
+            )
+            .AppendIns(
+                Ins(
+                    InsType::LOAD,
+                    Operand(OperandType::SSA_VALUE, OperandPos::DEST, "%b$val"),
+                    Operand(OperandType::SSA_VALUE, OperandPos::SRC1, "%b$ptr"),
+                    Operand(OperandPos::SRC2)
+                )
+            )
+            .AppendIns(
+                Ins(
+                    InsType::MUL,
+                    Operand(OperandType::SSA_VALUE, OperandPos::DEST, "%temp$0"),
+                    Operand(OperandType::SSA_VALUE, OperandPos::SRC1, "%b$val"),
+                    Operand(OperandType::CONSTANT, OperandPos::SRC2, "2")
+                )
+            )
+            .AppendIns(
+                Ins(
+                    InsType::ADD,
+                    Operand(OperandType::SSA_VALUE, OperandPos::DEST, "%c"),
                     Operand(OperandType::SSA_VALUE, OperandPos::SRC1, "%a"),
-                    Operand(OperandType::SSA_VALUE, OperandPos::SRC2, "%c")
+                    Operand(OperandType::SSA_VALUE, OperandPos::SRC2, "%temp$0")
+                )
+            )
+            .AppendIns(
+                Ins(
+                    InsType::CALL,
+                    Operand(OperandPos::DEST),
+                    Operand(OperandType::LABEL, OperandPos::SRC1, "@printf"),
+                    Operand(OperandPos::SRC2),
+                    arg1Id
                 )
             )
             .AppendIns(
                 Ins(
                     InsType::RET,
                     Operand(OperandPos::DEST),
-                    Operand(OperandType::SSA_VALUE, OperandPos::SRC1, "%d"),
-                    Operand(OperandPos::DEST)
+                    Operand(OperandType::CONSTANT, OperandPos::SRC1, "0"),
+                    Operand(OperandPos::SRC2)
                 )
             )
             .Build("start")
@@ -72,18 +132,7 @@ void test2() {
         std::cout << ":\n";
         for (int j = 0 ; j < block->GetInsNum() ; j ++) {
             std::cout << "    ";
-            Ins ins = block->GetIns(j);
-            if (ins.GetDestOp().GetOperandType() != OperandType::EMPTY) {
-                std::cout << ins.GetDestOp().GetOperandValue() << " = ";
-            }
-            std::cout << ToString(ins.GetInsType()) << " ";
-            if (ins.GetSrc1Op().GetOperandType() != OperandType::EMPTY) {
-                std::cout << ins.GetSrc1Op().GetOperandValue();
-            }
-            if (ins.GetSrc2Op().GetOperandType() != OperandType::EMPTY) {
-                std::cout << ", " << ins.GetSrc2Op().GetOperandValue();
-            }
-            std::cout << std::endl;
+            std::cout << block->GetIns(j).ToString(pool) << std::endl;
         }
     }
     std::cout << "}" << std::endl;

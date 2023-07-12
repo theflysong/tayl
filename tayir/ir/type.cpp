@@ -364,7 +364,7 @@ namespace tayir {
      */
     const int ComplexType::GetMemberTypeId(int sub) const {
         if (sub < 0 || sub >= typeNum) {
-            //TODO: throw exception
+            //TODO: throw an exception
             return -1;
         }
         return types[sub];
@@ -378,7 +378,7 @@ namespace tayir {
      */
     const int ComplexType::GetMemberOffset(int sub) const {
         if (sub < 0 || sub >= typeNum) {
-            //TODO: throw exception
+            //TODO: throw an exception
             return -1;
         }
         return offsets[sub];

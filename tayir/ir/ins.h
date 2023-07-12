@@ -13,6 +13,7 @@
 #pragma once
 
 #include <ir/operand.h>
+#include <vector>
 
 namespace tayir {
     /**
@@ -34,7 +35,15 @@ namespace tayir {
         /** 取余 */
         REM = 5,
         /** 返回 */
-        RET = 6
+        RET = 6,
+        /** 调用 */
+        CALL = 7,
+        /** 分配 */
+        ALLOC = 8,
+        /** 加载 */
+        LOAD = 9,
+        /** 存储 */
+        STORE = 10
     };
 
     /**
@@ -79,6 +88,11 @@ namespace tayir {
          * 
          */
         Operand src2Op;
+        /**
+         * @brief 参数ID
+         * 
+         */
+        int argOpId;
     public:
         /**
          * @brief Ins构造函数
@@ -94,8 +108,9 @@ namespace tayir {
          * @param destOp 目的数
          * @param src1Op 操作数1
          * @param src2Op 操作数2
+         * @param argOpId 参数ID
          */
-        Ins(const InsType type, Operand destOp, Operand src1Op, Operand src2Op);
+        Ins(const InsType type, Operand destOp, Operand src1Op, Operand src2Op, int argOpId = -1);
         /**
          * @brief 获取指令类型
          * 
@@ -120,5 +135,19 @@ namespace tayir {
          * @return 操作数2
          */
         const Operand GetSrc2Op() const;
+        /**
+         * @brief 获取参数ID
+         * 
+         * @return 参数ID
+         */
+        const int GetArgOpId() const;
+        /**
+         * @brief 指令转字符串
+         * 
+         * @return 字符串
+         */
+        std::string ToString(ArgOpPool &pool) const;
     };
+    
+    //TODO: Specific Instruction
 }

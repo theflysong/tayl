@@ -14,6 +14,9 @@
 #include <cstring>
 
 namespace tayir {
+    /*** 共用stringstream */
+    std::stringstream __ss;
+
 //---------------------------------------------------------
 //|                                                       |
 //|                        operand                        |
@@ -78,6 +81,38 @@ namespace tayir {
 //|                       argument                        |
 //|                                                       |
 //---------------------------------------------------------
+
+    /**
+     * @brief 参数池构造函数
+     * 
+     */
+    ArgOpPool::ArgOpPool() {
+    }
+
+    /**
+     * @brief 获取参数
+     * 
+     * @param id 参数ID
+     * @return 参数
+     */
+    std::vector<Operand> ArgOpPool::GetArg(int id) {
+        if (id < 0 || id >= (int)args.size()) {
+            //TODO: throw an exception instead of const char *
+            throw "Out of boundary!";
+        }
+        return args.at(id);
+    }
+
+    /**
+     * @brief 追加参数
+     * 
+     * @param arg 参数
+     * @return 参数ID
+     */
+    int ArgOpPool::AppendArg(std::vector<Operand> arg) {
+        args.push_back(arg);
+        return args.size() - 1;
+    }
 
     /**
      * @brief Argument构造函数

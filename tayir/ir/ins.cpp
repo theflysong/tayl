@@ -23,13 +23,17 @@ namespace tayir {
      */
     const char *ToString(InsType insType) {
         switch(insType) {
-        case InsType::NOP: return "nop";
-        case InsType::ADD: return "add";
-        case InsType::SUB: return "sub";
-        case InsType::MUL: return "mul";
-        case InsType::DIV: return "div";
-        case InsType::REM: return "rem";
-        case InsType::RET: return "ret";
+        case InsType::NOP:   return "nop";
+        case InsType::ADD:   return "add";
+        case InsType::SUB:   return "sub";
+        case InsType::MUL:   return "mul";
+        case InsType::DIV:   return "div";
+        case InsType::REM:   return "rem";
+        case InsType::RET:   return "ret";
+        case InsType::CALL:  return "call";
+        case InsType::ALLOC: return "alloc";
+        case InsType::LOAD:  return "load";
+        case InsType::STORE: return "store";
         default: return "error!";
         }
     }
@@ -41,7 +45,7 @@ namespace tayir {
      * 
      */
     Ins::Ins() 
-        : type(InsType::NOP), destOp(OperandPos::DEST), src1Op(OperandPos::SRC1), src2Op(OperandPos::SRC2)
+        : type(InsType::NOP), destOp(OperandPos::DEST), src1Op(OperandPos::SRC1), src2Op(OperandPos::SRC2), argOpId(-1)
     {
     }
 
@@ -53,8 +57,8 @@ namespace tayir {
      * @param src1Op 操作数1
      * @param src2Op 操作数2
      */
-    Ins::Ins(const InsType type, Operand destOp, Operand src1Op, Operand src2Op) 
-        : type(type), destOp(destOp), src1Op(src1Op), src2Op(src2Op)
+    Ins::Ins(const InsType type, Operand destOp, Operand src1Op, Operand src2Op, int argOpId) 
+        : type(type), destOp(destOp), src1Op(src1Op), src2Op(src2Op), argOpId(argOpId)
     {
     }
 
@@ -92,5 +96,38 @@ namespace tayir {
      */
     const Operand Ins::GetSrc2Op() const {
         return src2Op;
+    }
+
+    /**
+     * @brief 指令转字符串
+     * 
+     * @return 字符串
+     */
+    std::string Ins::ToString(ArgOpPool &pool) const {
+        __ss.str("");
+        __ss.clear();
+
+        if (destOp.GetOperandType() != OperandType::EMPTY) {
+            __ss << destOp.GetOperandValue() << " = ";
+        }
+        __ss << tayir::ToString(type) << " ";
+        if (src1Op.GetOperandType() != OperandType::EMPTY) {
+            __ss << src1Op.GetOperandValue();
+        }
+        if (src2Op.GetOperandType() != OperandType::EMPTY) {
+            __ss << ", " << src2Op.GetOperandValue();
+        }
+
+        if (argOpId != -1) {
+            std::vector<Operand> args = pool.GetArg(argOpId);
+            Operand firstArg = args.at(0);
+            __ss << ", [" << firstArg.GetOperandValue();
+            for (int i = 1 ; i < (int)args.size() ; i ++) {
+                __ss << ", " << args.at(i).GetOperandValue();
+            }
+            __ss << "]";
+        }
+
+        return __ss.str();
     }
 }

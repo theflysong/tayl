@@ -13,22 +13,29 @@
 #pragma once
 
 #include <string>
+#include <sstream>
+#include <vector>
 
 namespace tayir {
+    /*** 共用stringstream */
+    extern std::stringstream __ss;
+
     /**
      * @brief 操作数类型
      * @see Operand
      * 
      */
     enum class OperandType {
-        /** SSA值 */
-        SSA_VALUE = 0,
-        /** 符号 */
-        LABEL     = 1,
-        /** 常量 */
-        CONSTANT  = 2,
         /** 空 */
-        EMPTY = 3
+        EMPTY = 0,
+        /** SSA值 */
+        SSA_VALUE = 1,
+        /** 符号 */
+        LABEL     = 2,
+        /** 常量 */
+        CONSTANT  = 3,
+        /** 类型 */
+        TYPE  = 4
     };    
     
     /**
@@ -42,9 +49,7 @@ namespace tayir {
         /** 源1 */
         SRC1 = 1,
         /** 源2 */
-        SRC2 = 2,
-        /** 参数 */
-        ARGUMENT = 3
+        SRC2 = 2
     };
 
     /**
@@ -94,6 +99,36 @@ namespace tayir {
          * @return 操作数值
          */
         std::string GetOperandValue() const;
+    };
+    
+    /**
+     * @brief 参数池
+     * 
+     */
+    class ArgOpPool {
+    protected:
+        /** 参数池 */
+        std::vector<std::vector<Operand>> args;
+    public:
+        /**
+         * @brief 参数池构造函数
+         * 
+         */
+        ArgOpPool();
+        /**
+         * @brief 获取参数
+         * 
+         * @param id 参数ID
+         * @return 参数
+         */
+        std::vector<Operand> GetArg(int id);
+        /**
+         * @brief 追加参数
+         * 
+         * @param arg 参数
+         * @return 参数ID
+         */
+        int AppendArg(std::vector<Operand> arg);
     };
 
     /**
