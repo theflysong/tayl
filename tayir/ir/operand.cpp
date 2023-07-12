@@ -30,27 +30,27 @@ namespace tayir {
     }
 
     /**
-     * @brief 获取Operand Type
+     * @brief 获取操作数类型
      * 
-     * @return Operand Type
+     * @return 操作数类型
      */
     const OperandType Operand::GetOperandType() {
         return type;
     }
 
     /**
-     * @brief 获取Operand Pos
+     * @brief 获取操作数位置
      * 
-     * @return Operand Pos
+     * @return 操作数位置
      */
     const OperandPos Operand::GetOperandPos() {
         return pos;
     }
 
     /**
-     * @brief 获取Operand Value
+     * @brief 获取操作数值
      * 
-     * @return Operand Value
+     * @return 操作数值
      */
     std::string Operand::GetOperandValue() {
         return value;

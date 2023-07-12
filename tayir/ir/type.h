@@ -24,6 +24,7 @@ namespace tayir {
 //---------------------------------------------------------
     /**
      * @brief 基础类型原型
+     * @see Type::Type
      * 
      */
     struct PrimTypePrototype {
@@ -115,13 +116,13 @@ namespace tayir {
          */
         virtual ~Type();
         /**
-         * @brief 获取Size
+         * @brief 获取类型大小
          * 
          * @return 类型大小
          */
         const int GetSize() const;
         /**
-         * @brief 获取Name
+         * @brief 获取类型名
          * 
          * @return 类型名
          */
@@ -325,7 +326,6 @@ namespace tayir {
          * @param size 类型大小
          * @param align 对齐(2^align)
          * @param name 类型名
-         * @param isArray 是否为数组
          */
         ComplexType(std::vector<int> typeList, std::vector<int> offsetList, const int size, const int align, std::string name);
     public:
@@ -335,7 +335,7 @@ namespace tayir {
          */
         virtual ~ComplexType();
         /**
-         * @brief 获取Type Num
+         * @brief 获取类型数
          * 
          * @return 类型数
          */
@@ -347,14 +347,14 @@ namespace tayir {
          */
         const int GetAlign() const;
         /**
-         * @brief 获取Member Type Id
+         * @brief 获取成员类型ID
          * 
          * @param sub 下标 
          * @return 成员类型
          */
         const int GetMemberTypeId(int sub) const;
         /**
-         * @brief 获取Member Offset
+         * @brief 获取成员偏移
          * 
          * @param sub 下标 
          * @return 成员偏移
@@ -365,6 +365,7 @@ namespace tayir {
 
     /**
      * @brief 复合类型Builder
+     * @see ComplexType
      * 
      */
     class ComplexTypeBuilder {
@@ -383,20 +384,20 @@ namespace tayir {
          */
         ~ComplexTypeBuilder();
         /**
-         * @brief 获取Type Num
+         * @brief 获取类型数
          * 
          * @return 类型数
          */
         const int GetTypeNum() const;
         /**
-         * @brief 获取Member Type Id
+         * @brief 获取成员类型ID
          * 
          * @param sub 下标 
          * @return 成员类型ID
          */
         int &GetMemberTypeId(int sub);
         /**
-         * @brief 追加Type
+         * @brief 追加类型
          * 
          * @param typeId 类型
          * @return Builder

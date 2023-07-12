@@ -1,7 +1,6 @@
 QUIET                  = YES
 WARNINGS               = YES
-INPUT                  = ./tayir/ \
-                         ./tayir/ir/
+INPUT                  = ./tayir/ir/
 OUTPUT_DIRECTORY       = ./doc/tayir
 PROJECT_NAME           = "Tayhuang IR"
 PROJECT_NUMBER         =

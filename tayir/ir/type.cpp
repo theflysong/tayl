@@ -72,7 +72,6 @@ namespace tayir {
      * @brief Type构造函数
      * 
      * @param prototype 类型原型
-     * @param isArray 是否为数组
      */
     Type::Type(PrimTypePrototype prototype)
         : size(prototype.size), name(prototype.name)
@@ -84,7 +83,6 @@ namespace tayir {
      * 
      * @param size 类型大小
      * @param name 类型名
-     * @param isArray 是否为数组
      */
     Type::Type(const int size, std::string name)
         : size(size), name(name)
@@ -99,7 +97,7 @@ namespace tayir {
     }
 
     /**
-     * @brief 获取Size
+     * @brief 获取类型大小
      * 
      * @return 类型大小
      */
@@ -108,7 +106,7 @@ namespace tayir {
     }
 
     /**
-     * @brief 获取Name
+     * @brief 获取类型名
      * 
      * @return 类型名
      */
@@ -326,7 +324,6 @@ namespace tayir {
      * @param size 类型大小
      * @param align 对齐(2^align)
      * @param name 类型名
-     * @param isArray 是否为数组
      */
     ComplexType::ComplexType(std::vector<int> typeList, std::vector<int> offsetList, const int size, const int align, std::string name)
         : Type(size, name), types(new int[typeList.size()]), offsets(new int[offsetList.size()]), typeNum(typeList.size()), align(align)
@@ -351,7 +348,7 @@ namespace tayir {
     }
 
     /**
-     * @brief 获取Type Num
+     * @brief 获取类型数
      * 
      * @return 类型数
      */
@@ -360,7 +357,7 @@ namespace tayir {
     }
 
     /**
-     * @brief 获取Member Type Id
+     * @brief 获取成员类型ID
      * 
      * @param sub 下标 
      * @return 成员类型
@@ -374,7 +371,7 @@ namespace tayir {
     }
 
     /**
-     * @brief 获取Member Offset
+     * @brief 获取成员偏移
      * 
      * @param sub 下标 
      * @return 成员偏移
@@ -404,7 +401,7 @@ namespace tayir {
     }
 
     /**
-     * @brief 获取Type Num
+     * @brief 获取类型数
      * 
      * @return 类型数
      */
@@ -413,7 +410,7 @@ namespace tayir {
     }
 
     /**
-     * @brief 获取Member Type Id
+     * @brief 获取成员类型ID
      * 
      * @param sub 下标 
      * @return 成员类型ID
@@ -427,7 +424,7 @@ namespace tayir {
     }
 
     /**
-     * @brief 追加Type
+     * @brief 追加类型
      * 
      * @param typeId 类型
      * @return Builder
@@ -437,7 +434,13 @@ namespace tayir {
         return *this;
     }
 
-    // 对齐size
+    /**
+     * @brief 对齐
+     * 
+     * @param offset 偏移 
+     * @param alignBytes 对齐字节数
+     * @return 对齐后偏移
+     */
     static int AlignOffset(const int offset, int alignBytes) {
         if (offset % alignBytes == 0) {
             return offset;

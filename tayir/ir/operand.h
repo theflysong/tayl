@@ -16,9 +16,8 @@
 
 namespace tayir {
     /**
-     * @enum tayir::OperandType
      * @brief 操作数类型
-     * @see tayir::Operand
+     * @see Operand
      * 
      */
     enum class OperandType {
@@ -34,7 +33,7 @@ namespace tayir {
     
     /**
      * @brief 操作数位置
-     * @see tayir::Operand
+     * @see Operand
      * 
      */
     enum class OperandPos {
@@ -50,7 +49,7 @@ namespace tayir {
 
     /**
      * @brief 操作数
-     * @see tayir::Ins
+     * @see Ins
      * 
      */
     class Operand {
@@ -71,21 +70,21 @@ namespace tayir {
          */
         Operand(const OperandType type, const OperandPos pos, std::string value);
         /**
-         * @brief 获取Operand Type
+         * @brief 获取操作数类型
          * 
-         * @return Operand Type
+         * @return 操作数类型
          */
         const OperandType GetOperandType();
         /**
-         * @brief 获取Operand Pos
+         * @brief 获取操作数位置
          * 
-         * @return Operand Pos
+         * @return 操作数位置
          */
         const OperandPos GetOperandPos();
         /**
-         * @brief 获取Operand Value
+         * @brief 获取操作数值
          * 
-         * @return Operand Value
+         * @return 操作数值
          */
         std::string GetOperandValue();
     };

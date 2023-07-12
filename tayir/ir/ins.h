@@ -17,7 +17,7 @@
 namespace tayir {
     /**
      * @brief 指令类型
-     * @see tayir::Ins
+     * @see Ins
      * 
      */
     enum class InsType {
@@ -37,6 +37,14 @@ namespace tayir {
 
     /**
      * @brief 指令
+     * 
+     * IR程序执行/存储/翻译的基本单位
+     * 
+     * 形式为
+     * 
+     * destOp = type src1Op, src2Op
+     * 
+     * SSA 不可重复赋值
      * 
      */
     class Ins {
@@ -72,14 +80,9 @@ namespace tayir {
          */
         Ins(const InsType type, Operand destOp, Operand src1Op, Operand src2Op);
         /**
-         * @brief Ins析构函数
+         * @brief 获取指令类型
          * 
-         */
-        virtual ~Ins();
-        /**
-         * @brief 获取Ins Type
-         * 
-         * @return Ins Type
+         * @return 指令类型
          */
         const InsType GetInsType();
     };

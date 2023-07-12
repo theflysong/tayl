@@ -29,16 +29,9 @@ namespace tayir {
     }
 
     /**
-     * @brief Ins析构函数
+     * @brief 获取指令类型
      * 
-     */
-    Ins::~Ins() {
-    }
-
-    /**
-     * @brief 获取Ins Type
-     * 
-     * @return Ins Type
+     * @return 指令类型
      */
     const InsType Ins::GetInsType() {
         return type;
