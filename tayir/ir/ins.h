@@ -21,19 +21,29 @@ namespace tayir {
      * 
      */
     enum class InsType {
+        /** 空 */
+        NOP = 0,
         /** 加 */
-        ADD = 0,
+        ADD = 1,
         /** 减 */
-        SUB,
+        SUB = 2,
         /** 乘 */
-        MUL,
+        MUL = 3,
         /** 除 */
-        DIV,
+        DIV = 4,
         /** 取余 */
-        REM,
+        REM = 5,
         /** 返回 */
-        RET
+        RET = 6
     };
+
+    /**
+     * @brief 指令类型转字符串
+     * 
+     * @param insType 指令类型
+     * @return 字符串
+     */
+    const char *ToString(InsType insType);
 
     /**
      * @brief 指令
@@ -53,23 +63,30 @@ namespace tayir {
          * @brief 指令类型
          * 
          */
-        const InsType type;
+        InsType type;
         /**
          * @brief 目的数
          * 
          */
-        const Operand destOp;
+        Operand destOp;
         /**
          * @brief 操作数1
          * 
          */
-        const Operand src1Op;
+        Operand src1Op;
         /**
          * @brief 操作数2
          * 
          */
-        const Operand src2Op;
+        Operand src2Op;
     public:
+        /**
+         * @brief Ins构造函数
+         * 
+         * 构造NOP指令
+         * 
+         */
+        Ins();
         /**
          * @brief Ins构造函数
          * 
@@ -84,6 +101,24 @@ namespace tayir {
          * 
          * @return 指令类型
          */
-        const InsType GetInsType();
+        const InsType GetInsType() const;
+        /**
+         * @brief 获取目的数
+         * 
+         * @return 目的数
+         */
+        const Operand GetDestOp() const;
+        /**
+         * @brief 获取操作数1
+         * 
+         * @return 操作数1
+         */
+        const Operand GetSrc1Op() const;
+        /**
+         * @brief 获取操作数2
+         * 
+         * @return 操作数2
+         */
+        const Operand GetSrc2Op() const;
     };
 }

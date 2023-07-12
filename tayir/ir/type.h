@@ -310,12 +310,12 @@ namespace tayir {
      */
     class ComplexType : public Type {
     protected:
+        /** 类型数 */
+        const int typeNum;
         /** 类型列表 */
         int *types;
         /** 成员偏移 */
         int *offsets;
-        /** 类型数 */
-        const int typeNum;
         /** 对齐(2^align) */
         const int align;
         /**

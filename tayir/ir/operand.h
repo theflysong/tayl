@@ -43,8 +43,8 @@ namespace tayir {
         SRC1 = 1,
         /** 源2 */
         SRC2 = 2,
-        /** 长度指示 */
-        SIZE = 3
+        /** 参数 */
+        ARGUMENT = 3
     };
 
     /**
@@ -55,12 +55,19 @@ namespace tayir {
     class Operand {
     protected:
         /** 操作数类型 */
-        const OperandType type;
+        OperandType type;
         /** 操作数位置 */
-        const OperandPos pos;
+        OperandPos pos;
         /** 操作数值*/
         std::string value;
     public:
+        /**
+         * @brief Operand构造函数
+         * 
+         * 空Operand
+         * 
+         */
+        Operand(const OperandPos pos);
         /**
          * @brief Operand构造函数
          * 
@@ -74,18 +81,60 @@ namespace tayir {
          * 
          * @return 操作数类型
          */
-        const OperandType GetOperandType();
+        const OperandType GetOperandType() const;
         /**
          * @brief 获取操作数位置
          * 
          * @return 操作数位置
          */
-        const OperandPos GetOperandPos();
+        const OperandPos GetOperandPos() const;
         /**
          * @brief 获取操作数值
          * 
          * @return 操作数值
          */
-        std::string GetOperandValue();
+        std::string GetOperandValue() const;
+    };
+
+    /**
+     * @brief 参数
+     * 
+     * @see IRBasicBlock
+     * @see IRFunction
+     * 
+     */
+    class Argument {
+    protected:
+        /** 类型Id */
+        int typeId;
+        /** 名称 */
+        std::string name;
+    public:
+        /**
+         * @brief Argument构造函数
+         * 
+         * 空Argument
+         * 
+         */
+        Argument();
+        /**
+         * @brief Argument构造函数
+         * 
+         * @param typeId 类型ID
+         * @param name 名称
+         */
+        Argument(const int typeId, std::string name);
+        /**
+         * @brief 获取类型ID
+         * 
+         * @return 类型ID
+         */
+        const int GetTypeId() const;
+        /**
+         * @brief 获取名称
+         * 
+         * @return 名称
+         */
+        std::string GetName() const;
     };
 }

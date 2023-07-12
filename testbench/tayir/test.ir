@@ -1,12 +1,27 @@
 import std
 
+/*
+
+int main(int argc, const char **argv) {
+    int a, b;
+    scanf("%d%d", &a, &b);
+    c = a + b * 2;
+    printf("%d\n", c);
+    return 0;
+}
+
+*/
+
 func @main(i32 %argc, p64 %argv) -> i32 {
-    // because we use scanf, so we use instruction stack to alloc space from stack
-    %a = stack i32
-    %b = stack i32
-    // special ssa value ^0 will ignore the returning value
-    %^0 = call %scanf, ["%d%d", %a, %b]
-    %c = add %a, %b
-    %^0 = call %printf, ["%d", %a]
+start:
+    // because we use scanf, so we use instruction `alloc` to alloc space from stack
+    %a$ptr = alloc i32
+    %b$ptr = alloc i32
+    %useless$0 = call %scanf, ["%d%d", %a, %b]
+    %a$val = load %a$ptr
+    %b$val = load %b$ptr
+    %temp$0 = mul %b$val, 2
+    %c = add %a, %temp$0
+    %useless$1 = call %printf, ["%d\n", %c]
     ret 0
 }

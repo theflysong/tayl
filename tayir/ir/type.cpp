@@ -326,7 +326,7 @@ namespace tayir {
      * @param name 类型名
      */
     ComplexType::ComplexType(std::vector<int> typeList, std::vector<int> offsetList, const int size, const int align, std::string name)
-        : Type(size, name), types(new int[typeList.size()]), offsets(new int[offsetList.size()]), typeNum(typeList.size()), align(align)
+        : Type(size, name), typeNum(typeList.size()), types(new int[typeNum]), offsets(new int[typeNum]), align(align)
     {
         for (int i = 0 ; i < typeNum ; i ++) {
             types[i] = typeList.at(i);

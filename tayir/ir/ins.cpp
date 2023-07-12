@@ -16,6 +16,36 @@
 
 namespace tayir {
     /**
+     * @brief 指令类型转字符串
+     * 
+     * @param insType 指令类型
+     * @return 字符串
+     */
+    const char *ToString(InsType insType) {
+        switch(insType) {
+        case InsType::NOP: return "nop";
+        case InsType::ADD: return "add";
+        case InsType::SUB: return "sub";
+        case InsType::MUL: return "mul";
+        case InsType::DIV: return "div";
+        case InsType::REM: return "rem";
+        case InsType::RET: return "ret";
+        default: return "error!";
+        }
+    }
+
+    /**
+     * @brief Ins构造函数
+     * 
+     * 构造NOP指令
+     * 
+     */
+    Ins::Ins() 
+        : type(InsType::NOP), destOp(OperandPos::DEST), src1Op(OperandPos::SRC1), src2Op(OperandPos::SRC2)
+    {
+    }
+
+    /**
      * @brief Ins构造函数
      * 
      * @param type 指令类型
@@ -33,7 +63,34 @@ namespace tayir {
      * 
      * @return 指令类型
      */
-    const InsType Ins::GetInsType() {
+    const InsType Ins::GetInsType() const {
         return type;
+    }
+
+    /**
+     * @brief 获取目的数
+     * 
+     * @return 目的数
+     */
+    const Operand Ins::GetDestOp() const {
+        return destOp;
+    }
+
+    /**
+     * @brief 获取操作数1
+     * 
+     * @return 操作数1
+     */
+    const Operand Ins::GetSrc1Op() const {
+        return src1Op;
+    }
+    
+    /**
+     * @brief 获取操作数2
+     * 
+     * @return 操作数2
+     */
+    const Operand Ins::GetSrc2Op() const {
+        return src2Op;
     }
 }

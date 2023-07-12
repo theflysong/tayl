@@ -14,6 +14,23 @@
 #include <cstring>
 
 namespace tayir {
+//---------------------------------------------------------
+//|                                                       |
+//|                        operand                        |
+//|                                                       |
+//---------------------------------------------------------
+
+    /**
+     * @brief Operand构造函数
+     * 
+     * 空Operand
+     * 
+     */
+    Operand::Operand(const OperandPos pos)
+        : type(OperandType::EMPTY), pos(pos), value("")
+    {
+    }
+
     /**
      * @brief Operand构造函数
      * 
@@ -34,7 +51,7 @@ namespace tayir {
      * 
      * @return 操作数类型
      */
-    const OperandType Operand::GetOperandType() {
+    const OperandType Operand::GetOperandType() const {
         return type;
     }
 
@@ -43,7 +60,7 @@ namespace tayir {
      * 
      * @return 操作数位置
      */
-    const OperandPos Operand::GetOperandPos() {
+    const OperandPos Operand::GetOperandPos() const {
         return pos;
     }
 
@@ -52,7 +69,52 @@ namespace tayir {
      * 
      * @return 操作数值
      */
-    std::string Operand::GetOperandValue() {
+    std::string Operand::GetOperandValue() const {
         return value;
+    }
+
+//---------------------------------------------------------
+//|                                                       |
+//|                       argument                        |
+//|                                                       |
+//---------------------------------------------------------
+
+    /**
+     * @brief Argument构造函数
+     * 
+     * 空Argument
+     * 
+     */
+    Argument::Argument()
+        : typeId(-1), name("")
+    {
+    }
+
+    /**
+     * @brief Argument构造函数
+     * 
+     * @param typeId 类型ID
+     * @param name 名称
+     */
+    Argument::Argument(const int typeId, std::string name) 
+        : typeId(typeId), name(name)
+    {
+    }
+    
+    /**
+     * @brief 获取类型ID
+     * 
+     * @return 类型ID
+     */
+    const int Argument::GetTypeId() const {
+        return typeId;
+    }
+    /**
+     * @brief 获取名称
+     * 
+     * @return 名称
+     */
+    std::string Argument::GetName() const {
+        return name;
     }
 }

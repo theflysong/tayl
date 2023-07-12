@@ -9,7 +9,7 @@ target := $(path-bin)/tayir/tayir
 
 objects := main.o
 
-subdirs := ir/
+subdirs := ir/ tests/
 
 include $(foreach subdir, $(subdirs), $(path-d)/$(subdir)/include.mk)
 
