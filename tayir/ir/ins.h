@@ -142,11 +142,12 @@ namespace tayir {
          */
         const int GetArgOpId() const;
         /**
-         * @brief 指令转字符串
+         * @brief 打印
          * 
-         * @return 字符串
+         * @param pool 参数池
+         * @param outs 输出流 
          */
-        std::string ToString(ArgOpPool &pool) const;
+        void PrintRawString(ArgOpPool &pool, std::ostream &outs) const;
     };
     
     //TODO: Specific Instruction

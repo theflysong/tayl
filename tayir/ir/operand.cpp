@@ -14,9 +14,6 @@
 #include <cstring>
 
 namespace tayir {
-    /*** 共用stringstream */
-    std::stringstream __ss;
-
 //---------------------------------------------------------
 //|                                                       |
 //|                        operand                        |

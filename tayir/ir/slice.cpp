@@ -66,6 +66,20 @@ namespace tayir {
         return instructions[sub];
     }
 
+    /**
+     * @brief 打印
+     * 
+     * @param pool 参数池
+     * @param outs 输出流 
+     */
+    void IRFragment::PrintRawString(ArgOpPool &pool, std::ostream &outs) const {
+        for (int i = 0 ; i < insNum ; i ++) {
+            outs << "    ";
+            instructions[i].PrintRawString(pool, outs);
+            outs << std::endl;
+        }
+    }
+
 //--------------------------------------
 
     /**
@@ -203,6 +217,28 @@ namespace tayir {
         return name;
     }
 
+    /**
+     * @brief 打印
+     * 
+     * @param man 类型管理器
+     * @param pool 参数池
+     * @param stream 输出流 
+     */
+    void IRBasicBlock::PrintRawString(TypeManager &man, ArgOpPool &pool, std::ostream &outs) const {
+        outs << name;
+        if (argNum != 0) {
+            outs << "(";
+            Argument firstArg = args[0];
+            outs << man.GetType(firstArg.GetTypeId())->GetName() << " " << firstArg.GetName();
+            for (int i = 1 ; i < argNum ; i ++) {
+                outs << ", " << man.GetType(args[i].GetTypeId())->GetName() << " " << args[i].GetName();
+            }
+            outs << ")";
+        }
+        outs << ":\n";
+        frag->PrintRawString(pool, outs);
+    }
+
 //--------------------------------------
 
     /**
@@ -282,6 +318,27 @@ namespace tayir {
 //|                                                       |
 //---------------------------------------------------------
         
+    /**
+     * @brief 打印
+     * 
+     * @param man 类型管理器
+     * @param outs 输出流 
+     */
+    void IRFuncDecl::PrintRawString(TypeManager &man, std::ostream &outs) const {
+        outs << "def @" << name << "(";
+        if (args.size() != 0) {
+            Argument firstArg = args.at(0);
+            outs << man.GetType(firstArg.GetTypeId())->GetName() << " " << firstArg.GetName();
+            for (int i = 1 ; i < (int)args.size() ; i ++) {
+                outs << ", " << man.GetType(args.at(i).GetTypeId())->GetName() << " " << args.at(i).GetName();
+            }
+        }
+        outs << ") ";
+        if (returnTypeId != -1) {
+            outs << "-> " << man.GetType(returnTypeId)->GetName();
+        }
+    }
+
     /**
      * @brief IRFunction构造函数
      * 
@@ -379,6 +436,22 @@ namespace tayir {
      */
     const IRFuncDecl IRFunction::GetDecl() const {
         return decl;
+    }
+
+    /**
+     * @brief 打印
+     * 
+     * @param man 类型管理器
+     * @param pool 参数池
+     * @param outs 输出流 
+     */
+    void IRFunction::PrintRawString(TypeManager &man, ArgOpPool &pool, std::ostream &outs) const {
+        decl.PrintRawString(man, outs);
+        outs << " {" << std::endl;
+        for (int i = 0 ; i < blockNum ; i ++) {
+            blocks[i]->PrintRawString(man, pool, outs);
+        }
+        outs << "}" << std::endl;
     }
 
 //--------------------------------------

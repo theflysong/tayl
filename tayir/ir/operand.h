@@ -17,9 +17,6 @@
 #include <vector>
 
 namespace tayir {
-    /*** 共用stringstream */
-    extern std::stringstream __ss;
-
     /**
      * @brief 操作数类型
      * @see Operand

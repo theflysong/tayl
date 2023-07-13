@@ -99,35 +99,31 @@ namespace tayir {
     }
 
     /**
-     * @brief 指令转字符串
+     * @brief 打印
      * 
-     * @return 字符串
+     * @param pool 参数池
+     * @param outs 输出流 
      */
-    std::string Ins::ToString(ArgOpPool &pool) const {
-        __ss.str("");
-        __ss.clear();
-
+    void Ins::PrintRawString(ArgOpPool &pool, std::ostream &outs) const {
         if (destOp.GetOperandType() != OperandType::EMPTY) {
-            __ss << destOp.GetOperandValue() << " = ";
+            outs << destOp.GetOperandValue() << " = ";
         }
-        __ss << tayir::ToString(type) << " ";
+        outs << tayir::ToString(type) << " ";
         if (src1Op.GetOperandType() != OperandType::EMPTY) {
-            __ss << src1Op.GetOperandValue();
+            outs << src1Op.GetOperandValue();
         }
         if (src2Op.GetOperandType() != OperandType::EMPTY) {
-            __ss << ", " << src2Op.GetOperandValue();
+            outs << ", " << src2Op.GetOperandValue();
         }
 
         if (argOpId != -1) {
             std::vector<Operand> args = pool.GetArg(argOpId);
             Operand firstArg = args.at(0);
-            __ss << ", [" << firstArg.GetOperandValue();
+            outs << ", [" << firstArg.GetOperandValue();
             for (int i = 1 ; i < (int)args.size() ; i ++) {
-                __ss << ", " << args.at(i).GetOperandValue();
+                outs << ", " << args.at(i).GetOperandValue();
             }
-            __ss << "]";
+            outs << "]";
         }
-
-        return __ss.str();
     }
 }

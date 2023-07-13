@@ -77,6 +77,13 @@ namespace tayir {
          * @return 指令
          */
         virtual const Ins GetIns(int sub) const override;
+        /**
+         * @brief 打印
+         * 
+         * @param pool 参数池
+         * @param outs 输出流 
+         */
+        void PrintRawString(ArgOpPool &pool, std::ostream &outs) const;
         friend class IRFragmentBuilder;
     };
 
@@ -188,6 +195,14 @@ namespace tayir {
          * @return 基本块名
          */
         std::string GetName() const;
+        /**
+         * @brief 打印
+         * 
+         * @param man 类型管理器
+         * @param pool 参数池
+         * @param outs 输出流 
+         */
+        void PrintRawString(TypeManager &man, ArgOpPool &pool, std::ostream &outs) const;
         friend class IRBasicBlockBuilder;
     };
 
@@ -270,6 +285,13 @@ namespace tayir {
         int returnTypeId;
         /** 调用约定 */
         int conventionId;
+        /**
+         * @brief 打印
+         * 
+         * @param man 类型管理器
+         * @param outs 输出流 
+         */
+        void PrintRawString(TypeManager &man, std::ostream &outs) const;
     };
 
     /**
@@ -340,6 +362,14 @@ namespace tayir {
          * @return 函数声明
          */
         const IRFuncDecl GetDecl() const;
+        /**
+         * @brief 打印
+         * 
+         * @param man 类型管理器
+         * @param pool 参数池
+         * @param outs 输出流 
+         */
+        void PrintRawString(TypeManager &man, ArgOpPool &pool, std::ostream &outs) const;
         friend class IRFunctionBuilder;
     };
 
