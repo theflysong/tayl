@@ -46,7 +46,9 @@ namespace tayir {
         /** 源1 */
         SRC1 = 1,
         /** 源2 */
-        SRC2 = 2
+        SRC2 = 2,
+        /** 源3 */
+        SRC3 = 3
     };
 
     /**

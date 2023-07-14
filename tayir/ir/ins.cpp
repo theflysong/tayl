@@ -34,6 +34,15 @@ namespace tayir {
         case InsType::ALLOC: return "alloc";
         case InsType::LOAD:  return "load";
         case InsType::STORE: return "store";
+        case InsType::BR:    return "br";
+        case InsType::GOTO:  return "goto";
+        case InsType::GT:    return "gt";
+        case InsType::LT:    return "lt";
+        case InsType::GTE:   return "gte";
+        case InsType::LTE:   return "lte";
+        case InsType::NOT:   return "not";
+        case InsType::NEG:   return "neg";
+        case InsType::INV:   return "inv";
         default: return "error!";
         }
     }
@@ -45,10 +54,11 @@ namespace tayir {
      * 
      */
     Ins::Ins() 
-        : type(InsType::NOP), destOp(OperandPos::DEST), src1Op(OperandPos::SRC1), src2Op(OperandPos::SRC2), argOpId(-1)
+        : type(InsType::NOP), destOp(OperandPos::DEST), src1Op(OperandPos::SRC1), src2Op(OperandPos::SRC2), src3Op(OperandPos::SRC3), argOpId(-1)
     {
     }
 
+    
     /**
      * @brief Ins构造函数
      * 
@@ -56,9 +66,11 @@ namespace tayir {
      * @param destOp 目的数
      * @param src1Op 操作数1
      * @param src2Op 操作数2
+     * @param src3Op 操作数3
+     * @param argOpId 参数ID
      */
-    Ins::Ins(const InsType type, Operand destOp, Operand src1Op, Operand src2Op, int argOpId) 
-        : type(type), destOp(destOp), src1Op(src1Op), src2Op(src2Op), argOpId(argOpId)
+    Ins::Ins(const InsType type, Operand destOp, Operand src1Op, Operand src2Op, Operand src3Op, int argOpId) 
+        : type(type), destOp(destOp), src1Op(src1Op), src2Op(src2Op), src3Op(src3Op), argOpId(argOpId)
     {
     }
 
@@ -114,6 +126,9 @@ namespace tayir {
         }
         if (src2Op.GetOperandType() != OperandType::EMPTY) {
             outs << ", " << src2Op.GetOperandValue();
+        }
+        if (src3Op.GetOperandType() != OperandType::EMPTY) {
+            outs << ", " << src3Op.GetOperandValue();
         }
 
         if (argOpId != -1) {
