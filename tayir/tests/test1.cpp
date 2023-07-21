@@ -2,31 +2,32 @@
 #include <ir/slice.h>
 #include <iostream>
 
+using namespace tayir;
+
 struct myType {
-    unsigned char ui8_1;
-    int i32_2;
-    unsigned int ui32_3;
-    long long i64_4; 
-    unsigned char ui8_5;
-    int i32_6;
-    unsigned char ui8_7;
-    int i32_8;
-    unsigned long long ui64_9;
-    bool bool_10;
+    imm::ui8_t ui8_1;
+    imm::i32_t i32_2;
+    imm::ui32_t ui32_3;
+    imm::i64_t i64_4; 
+    imm::ui8_t ui8_5;
+    imm::i32_t i32_6;
+    imm::ui8_t ui8_7;
+    imm::i32_t i32_8;
+    imm::ui64_t ui64_9;
+    imm::bool_t bool_10;
 } __attribute__((aligned(8)));
 
 struct myType2 {
     myType myType_1;
-    unsigned int ui32_2;
-    bool bool_3;
+    imm::ui32_t ui32_2;
+    imm::bool_t bool_3;
     myType myType_4;
-    bool bool_5;
-    unsigned long long ui64_6;
-    unsigned char ui8_7;
+    imm::bool_t bool_5;
+    imm::ui64_t ui64_6;
+    imm::ui8_t ui8_7;
 } __attribute__((aligned(8)));
 
 void test1() {
-    using namespace tayir;
     TypeManager manager;
     std::cout << manager.GetType(manager.GetI8Id())->GetSize() << std::endl;
 

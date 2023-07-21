@@ -16,6 +16,8 @@
 #include <sstream>
 #include <vector>
 
+#include <ir/type.h>
+
 namespace tayir {
     /**
      * @brief 操作数类型
@@ -30,7 +32,7 @@ namespace tayir {
         /** 符号 */
         LABEL     = 2,
         /** 常量 */
-        CONSTANT  = 3,
+        IMMEDIATE  = 3,
         /** 类型 */
         TYPE  = 4
     };    
@@ -52,34 +54,24 @@ namespace tayir {
     };
 
     /**
-     * @brief 操作数
+     * @brief 操作数基类
      * @see Ins
      * 
      */
-    class Operand {
+    class OperandBase {
     protected:
         /** 操作数类型 */
-        OperandType type;
+        const OperandType type;
         /** 操作数位置 */
-        OperandPos pos;
-        /** 操作数值*/
-        std::string value;
+        const OperandPos pos;
     public:
-        /**
-         * @brief Operand构造函数
-         * 
-         * 空Operand
-         * 
-         */
-        Operand(const OperandPos pos);
         /**
          * @brief Operand构造函数
          * 
          * @param type 操作数类型
          * @param pos 操作数位置
-         * @param value 操作数值
          */
-        Operand(const OperandType type, const OperandPos pos, std::string value);
+        OperandBase(const OperandType type, const OperandPos pos);
         /**
          * @brief 获取操作数类型
          * 
@@ -93,41 +85,209 @@ namespace tayir {
          */
         const OperandPos GetOperandPos() const;
         /**
-         * @brief 获取操作数值
+         * @brief 操作数转字符串
          * 
-         * @return 操作数值
+         * @return 字符串
          */
-        std::string GetOperandValue() const;
+        virtual std::string ToString() const = 0;
+    };
+
+    /**
+     * @brief 空操作数
+     * @see OperandBase
+     * 
+     */
+    class EmptyOperand : public OperandBase{
+    public:
+        /**
+         * @brief 空操作数构造函数
+         * 
+         * @param pos 操作数位置
+         * 
+         */
+        EmptyOperand(const OperandPos pos);
+        /**
+         * @brief 操作数转字符串
+         * 
+         * @return 字符串
+         */
+        virtual std::string ToString() const override final;
+    };
+
+    /**
+     * @brief 零操作数
+     * @see OperandBase
+     * 
+     */
+    class ZeroOperand : public OperandBase{
+    public:
+        /**
+         * @brief 零操作数构造函数
+         * 
+         * @param pos 操作数位置
+         * 
+         */
+        ZeroOperand(const OperandPos pos);
+        /**
+         * @brief 操作数转字符串
+         * 
+         * @return 字符串
+         */
+        virtual std::string ToString() const override final;
+    };
+
+    /**
+     * @brief 一操作数
+     * @see OperandBase
+     * 
+     */
+    class OneOperand : public OperandBase{
+    public:
+        /**
+         * @brief 一操作数构造函数
+         * 
+         * @param pos 操作数位置
+         * 
+         */
+        OneOperand(const OperandPos pos);
+        /**
+         * @brief 操作数转字符串
+         * 
+         * @return 字符串
+         */
+        virtual std::string ToString() const override final;
     };
     
     /**
-     * @brief 参数池
+     * @brief 空指针操作数
+     * @see OperandBase
      * 
      */
-    class ArgOpPool {
-    protected:
-        /** 参数池 */
-        std::vector<std::vector<Operand>> args;
+    class NullOperand : public OperandBase{
     public:
         /**
-         * @brief 参数池构造函数
+         * @brief 空指针操作数构造函数
+         * 
+         * @param pos 操作数位置
          * 
          */
-        ArgOpPool();
+        NullOperand(const OperandPos pos);
         /**
-         * @brief 获取参数
+         * @brief 操作数转字符串
          * 
-         * @param id 参数ID
-         * @return 参数
+         * @return 字符串
          */
-        std::vector<Operand> GetArg(int id);
+        virtual std::string ToString() const override final;
+    };
+
+    /**
+     * @brief 立即数
+     * @see ImmediateOperand
+     * 
+     */
+    union ImmediateValue {
+        /** i8 value */
+        imm::i8_t i8Val;
+        /** i16 value */
+        imm::i16_t i16Val;
+        /** i32 value */
+        imm::i32_t i32Val;
+        /** i64 value */
+        imm::i64_t i64Val;
+
+        /** ui8 value */
+        imm::ui8_t ui8Val;
+        /** ui16 value */
+        imm::ui16_t ui16Val;
+        /** ui32 value */
+        imm::ui32_t ui32Val;
+        /** ui64 value */
+        imm::ui64_t ui64Val;
+
+        /** p16 value */
+        imm::p16_t p16Val;
+        /** p32 value */
+        imm::p32_t p32Val;
+        /** p64 value */
+        imm::p64_t p64Val;
+
+        /** float value */
+        imm::float_t floatVal;
+        /** double value */
+        imm::double_t doubleVal;
+        /** bool value */
+        imm::bool_t boolVal;
+    };
+
+    /**
+     * @brief 立即数操作数
+     * @see OperandBase
+     * 
+     */
+    class ImmediateOperand : public OperandBase {
+    protected:
+        /** 立即数类型 */
+        imm::itype type;
+        /** 立即数值 */
+        ImmediateValue value;
+    public:
         /**
-         * @brief 追加参数
+         * @brief 立即数操作数构造函数
          * 
-         * @param arg 参数
-         * @return 参数ID
+         * @param pos 操作数位置
+         * @param type 立即数类型
+         * @param value 立即数值
+         * 
          */
-        int AppendArg(std::vector<Operand> arg);
+        ImmediateOperand(const OperandPos pos, const imm::itype type, const ImmediateValue value);
+        /**
+         * @brief 获取立即数值
+         * 
+         * @return 立即数值
+         */
+        const ImmediateValue GetValue() const;
+        /**
+         * @brief 获取立即数类型
+         * 
+         * @return 立即数类型
+         */
+        const imm::itype GetType() const;
+        /**
+         * @brief 操作数转字符串
+         * 
+         * @return 字符串
+         */
+        virtual std::string ToString() const override final;
+    };
+
+    /**
+     * @brief 操作数池
+     * 
+     */
+    class OperandPool {
+    protected:
+        /** 操作数列表 */
+        std::vector<OperandBase *> operands;
+    public:
+        /**
+         * @brief 操作数池构造函数
+         * 
+         */
+        OperandPool();
+        /**
+         * @brief 获取操作数
+         * 
+         * @param id 操作数ID
+         * @return 操作数
+         */
+        OperandBase * GetOperand(int id);
+        /**
+         * @brief 追加操作数
+         * 
+         * @param operand 操作数
+         * @return 操作数ID
+         */
+        int AppendOperand(OperandBase *operand);
     };
 
     /**

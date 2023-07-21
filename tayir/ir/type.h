@@ -47,7 +47,69 @@ namespace tayir {
         PrimTypePrototype(const int size, const char *name);
     };
 
-    namespace ptypes {
+    namespace imm {
+        /**
+         * @brief 立即数类型
+         * 
+         */
+        enum class itype {
+            /** i8 */
+            I8,
+            /** i16 */
+            I16,
+            /** i32 */
+            I32,
+            /** i64 */
+            I64,
+            /** ui8 */
+            UI8,
+            /** ui16 */
+            UI16,
+            /** ui32 */
+            UI32,
+            /** ui64 */
+            UI64,
+            /** p16 */
+            P16,
+            /** p32 */
+            P32,
+            /** p64 */
+            P64,
+            /** float */
+            FLOAT,
+            /** double */
+            DOUBLE,
+            /** bool */
+            BOOL
+        };
+        /** i8 */
+        typedef char i8_t;
+        /** i16 */
+        typedef short i16_t;
+        /** i32 */
+        typedef int i32_t;
+        /** i64 */
+        typedef long long i64_t;
+        /** ui8 */
+        typedef unsigned char ui8_t;
+        /** ui16 */
+        typedef unsigned short ui16_t;
+        /** ui32 */
+        typedef unsigned int ui32_t;
+        /** ui64 */
+        typedef unsigned long long ui64_t;
+        /** p16 */
+        typedef unsigned short p16_t;
+        /** p32 */
+        typedef unsigned int p32_t;
+        /** p64 */
+        typedef unsigned long long p64_t;
+        /** float */
+        typedef float float_t;
+        /** double */
+        typedef double double_t;
+        /** bool */
+        typedef bool bool_t;
         /** i8 */
         extern PrimTypePrototype I8;
         /** i16 */

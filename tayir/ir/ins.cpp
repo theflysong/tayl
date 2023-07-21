@@ -47,98 +47,98 @@ namespace tayir {
         }
     }
 
-    /**
-     * @brief Ins构造函数
-     * 
-     * 构造NOP指令
-     * 
-     */
-    Ins::Ins() 
-        : type(InsType::NOP), destOp(OperandPos::DEST), src1Op(OperandPos::SRC1), src2Op(OperandPos::SRC2), src3Op(OperandPos::SRC3), argOpId(-1)
-    {
-    }
+    // /**
+    //  * @brief Ins构造函数
+    //  * 
+    //  * 构造NOP指令
+    //  * 
+    //  */
+    // Ins::Ins() 
+    //     : type(InsType::NOP), destOp(OperandPos::DEST), src1Op(OperandPos::SRC1), src2Op(OperandPos::SRC2), src3Op(OperandPos::SRC3), argOpId(-1)
+    // {
+    // }
 
     
-    /**
-     * @brief Ins构造函数
-     * 
-     * @param type 指令类型
-     * @param destOp 目的数
-     * @param src1Op 操作数1
-     * @param src2Op 操作数2
-     * @param src3Op 操作数3
-     * @param argOpId 参数ID
-     */
-    Ins::Ins(const InsType type, Operand destOp, Operand src1Op, Operand src2Op, Operand src3Op, int argOpId) 
-        : type(type), destOp(destOp), src1Op(src1Op), src2Op(src2Op), src3Op(src3Op), argOpId(argOpId)
-    {
-    }
+    // /**
+    //  * @brief Ins构造函数
+    //  * 
+    //  * @param type 指令类型
+    //  * @param destOp 目的数
+    //  * @param src1Op 操作数1
+    //  * @param src2Op 操作数2
+    //  * @param src3Op 操作数3
+    //  * @param argOpId 参数ID
+    //  */
+    // Ins::Ins(const InsType type, Operand destOp, Operand src1Op, Operand src2Op, Operand src3Op, int argOpId) 
+    //     : type(type), destOp(destOp), src1Op(src1Op), src2Op(src2Op), src3Op(src3Op), argOpId(argOpId)
+    // {
+    // }
 
-    /**
-     * @brief 获取指令类型
-     * 
-     * @return 指令类型
-     */
-    const InsType Ins::GetInsType() const {
-        return type;
-    }
+    // /**
+    //  * @brief 获取指令类型
+    //  * 
+    //  * @return 指令类型
+    //  */
+    // const InsType Ins::GetInsType() const {
+    //     return type;
+    // }
 
-    /**
-     * @brief 获取目的数
-     * 
-     * @return 目的数
-     */
-    const Operand Ins::GetDestOp() const {
-        return destOp;
-    }
+    // /**
+    //  * @brief 获取目的数
+    //  * 
+    //  * @return 目的数
+    //  */
+    // const Operand Ins::GetDestOp() const {
+    //     return destOp;
+    // }
 
-    /**
-     * @brief 获取操作数1
-     * 
-     * @return 操作数1
-     */
-    const Operand Ins::GetSrc1Op() const {
-        return src1Op;
-    }
+    // /**
+    //  * @brief 获取操作数1
+    //  * 
+    //  * @return 操作数1
+    //  */
+    // const Operand Ins::GetSrc1Op() const {
+    //     return src1Op;
+    // }
     
-    /**
-     * @brief 获取操作数2
-     * 
-     * @return 操作数2
-     */
-    const Operand Ins::GetSrc2Op() const {
-        return src2Op;
-    }
+    // /**
+    //  * @brief 获取操作数2
+    //  * 
+    //  * @return 操作数2
+    //  */
+    // const Operand Ins::GetSrc2Op() const {
+    //     return src2Op;
+    // }
 
-    /**
-     * @brief 打印
-     * 
-     * @param pool 参数池
-     * @param outs 输出流 
-     */
-    void Ins::PrintRawString(ArgOpPool &pool, std::ostream &outs) const {
-        if (destOp.GetOperandType() != OperandType::EMPTY) {
-            outs << destOp.GetOperandValue() << " = ";
-        }
-        outs << tayir::ToString(type) << " ";
-        if (src1Op.GetOperandType() != OperandType::EMPTY) {
-            outs << src1Op.GetOperandValue();
-        }
-        if (src2Op.GetOperandType() != OperandType::EMPTY) {
-            outs << ", " << src2Op.GetOperandValue();
-        }
-        if (src3Op.GetOperandType() != OperandType::EMPTY) {
-            outs << ", " << src3Op.GetOperandValue();
-        }
+    // /**
+    //  * @brief 打印
+    //  * 
+    //  * @param pool 参数池
+    //  * @param outs 输出流 
+    //  */
+    // void Ins::PrintRawString(ArgOpPool &pool, std::ostream &outs) const {
+    //     if (destOp.GetOperandType() != OperandType::EMPTY) {
+    //         outs << destOp.GetOperandValue() << " = ";
+    //     }
+    //     outs << tayir::ToString(type) << " ";
+    //     if (src1Op.GetOperandType() != OperandType::EMPTY) {
+    //         outs << src1Op.GetOperandValue();
+    //     }
+    //     if (src2Op.GetOperandType() != OperandType::EMPTY) {
+    //         outs << ", " << src2Op.GetOperandValue();
+    //     }
+    //     if (src3Op.GetOperandType() != OperandType::EMPTY) {
+    //         outs << ", " << src3Op.GetOperandValue();
+    //     }
 
-        if (argOpId != -1) {
-            std::vector<Operand> args = pool.GetArg(argOpId);
-            Operand firstArg = args.at(0);
-            outs << ", [" << firstArg.GetOperandValue();
-            for (int i = 1 ; i < (int)args.size() ; i ++) {
-                outs << ", " << args.at(i).GetOperandValue();
-            }
-            outs << "]";
-        }
-    }
+    //     if (argOpId != -1) {
+    //         std::vector<Operand> args = pool.GetArg(argOpId);
+    //         Operand firstArg = args.at(0);
+    //         outs << ", [" << firstArg.GetOperandValue();
+    //         for (int i = 1 ; i < (int)args.size() ; i ++) {
+    //             outs << ", " << args.at(i).GetOperandValue();
+    //         }
+    //         outs << "]";
+    //     }
+    // }
 }

@@ -99,27 +99,17 @@ namespace tayir {
          * @brief 目的数
          * 
          */
-        Operand destOp;
+        int destOp;
         /**
          * @brief 操作数1
          * 
          */
-        Operand src1Op;
+        int src1Op;
         /**
          * @brief 操作数2
          * 
          */
-        Operand src2Op;
-        /**
-         * @brief 操作数3
-         * 
-         */
-        Operand src3Op;
-        /**
-         * @brief 参数ID
-         * 
-         */
-        int argOpId;
+        int src2Op;
     public:
         /**
          * @brief Ins构造函数
@@ -135,10 +125,8 @@ namespace tayir {
          * @param destOp 目的数
          * @param src1Op 操作数1
          * @param src2Op 操作数2
-         * @param src3Op 操作数3
-         * @param argOpId 参数ID
          */
-        Ins(const InsType type, Operand destOp, Operand src1Op, Operand src2Op, Operand src3Op, int argOpId = -1);
+        Ins(const InsType type, int destOp, int src1Op, int src2Op);
         /**
          * @brief 获取指令类型
          * 
@@ -150,38 +138,26 @@ namespace tayir {
          * 
          * @return 目的数
          */
-        const Operand GetDestOp() const;
+        const int GetDestOp() const;
         /**
          * @brief 获取操作数1
          * 
          * @return 操作数1
          */
-        const Operand GetSrc1Op() const;
+        const int GetSrc1Op() const;
         /**
          * @brief 获取操作数2
          * 
          * @return 操作数2
          */
-        const Operand GetSrc2Op() const;
-        /**
-         * @brief 获取操作数3
-         * 
-         * @return 操作数3
-         */
-        const Operand GetSrc3Op() const;
-        /**
-         * @brief 获取参数ID
-         * 
-         * @return 参数ID
-         */
-        const int GetArgOpId() const;
+        const int GetSrc2Op() const;
         /**
          * @brief 打印
          * 
          * @param pool 参数池
          * @param outs 输出流 
          */
-        void PrintRawString(ArgOpPool &pool, std::ostream &outs) const;
+        void PrintRawString(OperandPool &pool, std::ostream &outs) const;
     };
     
     //TODO: Specific Instruction

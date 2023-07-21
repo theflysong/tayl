@@ -31,7 +31,7 @@ namespace tayir {
     {
     }
 
-    namespace ptypes {
+    namespace imm {
         /** i8 */
         PrimTypePrototype     I8(1, "i8");
         /** i16 */
@@ -125,23 +125,23 @@ namespace tayir {
      * 
      */
     TypeManager::TypeManager() {
-        idI8  = AppendType(new Type(ptypes::I8));
-        idI16 = AppendType(new Type(ptypes::I16));
-        idI32 = AppendType(new Type(ptypes::I32));
-        idI64 = AppendType(new Type(ptypes::I64));
+        idI8  = AppendType(new Type(imm::I8));
+        idI16 = AppendType(new Type(imm::I16));
+        idI32 = AppendType(new Type(imm::I32));
+        idI64 = AppendType(new Type(imm::I64));
 
-        idUI8  = AppendType(new Type(ptypes::UI8));
-        idUI16 = AppendType(new Type(ptypes::UI16));
-        idUI32 = AppendType(new Type(ptypes::UI32));
-        idUI64 = AppendType(new Type(ptypes::UI64));
+        idUI8  = AppendType(new Type(imm::UI8));
+        idUI16 = AppendType(new Type(imm::UI16));
+        idUI32 = AppendType(new Type(imm::UI32));
+        idUI64 = AppendType(new Type(imm::UI64));
         
-        idP16 = AppendType(new Type(ptypes::P16));
-        idP32 = AppendType(new Type(ptypes::P32));
-        idP64 = AppendType(new Type(ptypes::P64));
+        idP16 = AppendType(new Type(imm::P16));
+        idP32 = AppendType(new Type(imm::P32));
+        idP64 = AppendType(new Type(imm::P64));
 
-        idFloat  = AppendType(new Type(ptypes::FLOAT));
-        idDouble = AppendType(new Type(ptypes::DOUBLE));
-        idBool   = AppendType(new Type(ptypes::BOOL));
+        idFloat  = AppendType(new Type(imm::FLOAT));
+        idDouble = AppendType(new Type(imm::DOUBLE));
+        idBool   = AppendType(new Type(imm::BOOL));
     }
 
     /**
