@@ -192,7 +192,8 @@ namespace tayir {
      */
     enum class SymbolScope {
         GLOBAL = 0,
-        LOCAL = 1
+        LOCAL = 1,
+        BUILTIN = 2
     };
 
     /**

@@ -225,8 +225,14 @@ namespace tayir {
         if (scope == SymbolScope::GLOBAL) {
             str = "@";
         }
-        else {
+        else if (scope == SymbolScope::BUILTIN) {
+            str = "#";
+        }
+        else if (scope == SymbolScope::LOCAL) {
             str = "%";
+        }
+        else {
+            str = "";
         }
         return str + name;
     }

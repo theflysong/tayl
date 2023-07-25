@@ -83,38 +83,25 @@ namespace tayir {
      * 
      * 形式为
      * 
-     * destOp = type src1Op, src2Op, src3Op, argsOp
+     * destOp = ins src1Op, src2Op
+     * 
+     * 特殊形式为
+     * 
+     * br cond, if, else
      * 
      * SSA 不可重复赋值
      * 
      */
     class Ins {
     protected:
-        /**
-         * @brief 指令类型
-         * 
-         */
+        /** 指令类型 */
         InsType type;
-        /**
-         * @brief 目的数
-         * 
-         */
+        /** 目的数 & 条件 */
         int destOp;
-        /**
-         * @brief 操作数1
-         * 
-         */
+        /** 操作数1 & 如果 */
         int src1Op;
-        /**
-         * @brief 操作数2
-         * 
-         */
+        /** 操作数2 & 否则 */
         int src2Op;
-        /**
-         * @brief 操作数3
-         * 
-         */
-        int src3Op;
     public:
         /**
          * @brief Ins构造函数
@@ -127,9 +114,17 @@ namespace tayir {
          * @brief Ins构造函数
          * 
          * @param type 指令类型
-         * @param destOp 目的数
-         * @param src1Op 操作数1
-         * @param src2Op 操作数2
+         * @param destOp 目的数 & 条件
+         * @param srcOp 操作数1 & 跳转
+         */
+        Ins(const InsType type, int destOp, int srcOp);
+        /**
+         * @brief Ins构造函数
+         * 
+         * @param type 指令类型
+         * @param destOp 目的数 & 条件
+         * @param src1Op 操作数1 & 如果
+         * @param src2Op 操作数2 & 否则
          */
         Ins(const InsType type, int destOp, int src1Op, int src2Op);
         /**
@@ -157,6 +152,24 @@ namespace tayir {
          */
         const int GetSrc2Op() const;
         /**
+         * @brief 获取如果
+         * 
+         * @return 如果
+         */
+        const int GetCondOp() const;
+        /**
+         * @brief 获取如果
+         * 
+         * @return 如果
+         */
+        const int GetIfOp() const;
+        /**
+         * @brief 获取否则
+         * 
+         * @return 否则
+         */
+        const int GetElseOp() const;
+        /**
          * @brief 打印
          * 
          * @param pool 参数池
@@ -164,6 +177,4 @@ namespace tayir {
          */
         void PrintRawString(OperandPool &pool, std::ostream &outs) const;
     };
-    
-    //TODO: Specific Instruction
 }
