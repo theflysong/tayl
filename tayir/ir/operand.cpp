@@ -23,11 +23,17 @@ namespace tayir {
      * @brief Operand构造函数
      * 
      * @param type 操作数类型
-     * @param pos 操作数位置
      */
-    OperandBase::OperandBase(const OperandType type, const OperandPos pos) 
-        : type(type), pos(pos)
+    OperandBase::OperandBase(const OperandType type) 
+        : type(type)
     {
+    }
+
+    /**
+     * @brief 操作数析构函数
+     * 
+     */
+    OperandBase::~OperandBase() {
     }
 
     /**
@@ -39,14 +45,7 @@ namespace tayir {
         return type;
     }
 
-    /**
-     * @brief 获取操作数位置
-     * 
-     * @return 操作数位置
-     */
-    const OperandPos OperandBase::GetOperandPos() const {
-        return pos;
-    }
+//----------------------
 
     /**
      * @brief 空操作数构造函数
@@ -54,90 +53,33 @@ namespace tayir {
      * @param pos 操作数位置
      * 
      */
-    EmptyOperand::EmptyOperand(const OperandPos pos)
-        : OperandBase(OperandType::EMPTY, pos) 
+    EmptyOperand::EmptyOperand()
+        : OperandBase(OperandType::EMPTY) 
     {
     }
 
     /**
      * @brief 操作数转字符串
      * 
+     * @param pool 操作数池
+     * 
      * @return 字符串
      */
-    std::string EmptyOperand::ToString() const {
+    std::string EmptyOperand::ToString(OperandPool &pool) const {
         return "";
     }
 
-    /**
-     * @brief 零操作数构造函数
-     * 
-     * @param pos 操作数位置
-     * 
-     */
-    ZeroOperand::ZeroOperand(const OperandPos pos)
-        : OperandBase(OperandType::IMMEDIATE, pos) 
-    {
-    }
-
-    /**
-     * @brief 操作数转字符串
-     * 
-     * @return 字符串
-     */
-    std::string ZeroOperand::ToString() const {
-        return "0";
-    }
-
-    /**
-     * @brief 一操作数构造函数
-     * 
-     * @param pos 操作数位置
-     * 
-     */
-    OneOperand::OneOperand(const OperandPos pos)
-        : OperandBase(OperandType::IMMEDIATE, pos) 
-    {
-    }
-
-    /**
-     * @brief 操作数转字符串
-     * 
-     * @return 字符串
-     */
-    std::string OneOperand::ToString() const {
-        return "1";
-    }
-
-    /**
-     * @brief 空指针操作数构造函数
-     * 
-     * @param pos 操作数位置
-     * 
-     */
-    NullOperand::NullOperand(const OperandPos pos)
-        : OperandBase(OperandType::IMMEDIATE, pos) 
-    {
-    }
-
-    /**
-     * @brief 操作数转字符串
-     * 
-     * @return 字符串
-     */
-    std::string NullOperand::ToString() const {
-        return "null";
-    }
+//----------------------
 
     /**
      * @brief 立即数操作数构造函数
      * 
-     * @param pos 操作数位置
      * @param type 立即数类型
      * @param value 立即数值
      * 
      */
-    ImmediateOperand::ImmediateOperand(const OperandPos pos, const imm::itype type, const ImmediateValue value) 
-        : OperandBase(OperandType::IMMEDIATE, pos), type(type), value(value)
+    ImmediateOperand::ImmediateOperand(const imm::itype type, const ImmediateValue value) 
+        : OperandBase(OperandType::IMMEDIATE), type(type), value(value)
     {
     }
 
@@ -149,6 +91,7 @@ namespace tayir {
     const ImmediateValue ImmediateOperand::GetValue() const {
         return value;
     }
+
     /**
      * @brief 获取立即数类型
      * 
@@ -157,12 +100,15 @@ namespace tayir {
     const imm::itype ImmediateOperand::GetType() const {
         return type;
     }
+
     /**
      * @brief 操作数转字符串
      * 
+     * @param pool 操作数池
+     * 
      * @return 字符串
      */
-    std::string ImmediateOperand::ToString() const {
+    std::string ImmediateOperand::ToString(OperandPool &pool) const {
         std::stringstream ss;
         switch(type) {
         case imm::itype::I8: {
@@ -185,19 +131,36 @@ namespace tayir {
             ss << (long long)value.i64Val;
             return ss.str();
         }
-        case imm::itype::UI8:
-        case imm::itype::UI16:
-        case imm::itype::UI32: 
+        case imm::itype::UI8: {
+            // 无符号数
+            ss << (unsigned long long)(value.ui64Val & 0xFF);
+            return ss.str();
+        }
+        case imm::itype::UI16: {
+            // 无符号数
+            ss << (unsigned long long)(value.ui64Val & 0xFFFF);
+            return ss.str();
+        }
+        case imm::itype::UI32:  {
+            // 无符号数
+            ss << (unsigned long long)(value.ui64Val & 0xFFFFFFFF);
+            return ss.str();
+        }
         case imm::itype::UI64: {
             // 无符号数
-            ss << (unsigned long long)value.ui64Val;
+            ss << (unsigned long long)(value.ui64Val);
             return ss.str();
         }
         case imm::itype::P16:
         case imm::itype::P32:
         case imm::itype::P64: {
             // 指针
-            ss << (void *)value.p64Val;
+            if ((void *)value.p64Val == NULL) {
+                ss << "null";
+            }
+            else {
+                ss << (void *)value.p64Val;
+            }
             return ss.str();
         }
         case imm::itype::FLOAT: {
@@ -217,6 +180,170 @@ namespace tayir {
         }
         }
         return "error!";
+    }
+
+//----------------------
+
+    /**
+     * @brief 符号操作数构造函数
+     * 
+     * @param scope 符号范围
+     * @param name 符号名称
+     */
+    SymbolOperand::SymbolOperand(const SymbolScope scope, std::string name)
+        : OperandBase(OperandType::SYMBOL), scope(scope), name(name)
+    {
+    }
+
+    /**
+     * @brief 获取符号范围
+     * 
+     * @return 符号范围
+     */
+    const SymbolScope SymbolOperand::GetScope() const {
+        return scope;
+    }
+
+    /**
+     * @brief 获取符号名称
+     * 
+     * @return 符号名称
+     */
+    const std::string SymbolOperand::GetName() const {
+        return name;
+    }
+
+    /**
+     * @brief 操作数转字符串
+     * 
+     * @param pool 操作数池
+     * 
+     * @return 字符串
+     */
+    std::string SymbolOperand::ToString(OperandPool &pool) const {
+        std::string str;
+        if (scope == SymbolScope::GLOBAL) {
+            str = "@";
+        }
+        else {
+            str = "%";
+        }
+        return str + name;
+    }
+
+//----------------------
+
+    /**
+     * @brief 标号操作数构造函数
+     * 
+     * @param name 标号名称
+     */
+    LabelOperand::LabelOperand(std::string name)
+        : OperandBase(OperandType::LABEL), name(name)
+    {
+    }
+
+    /**
+     * @brief 获取标号名称
+     * 
+     * @return 标号名称
+     */
+    const std::string LabelOperand::GetName() const {
+        return name;
+    }
+
+    /**
+     * @brief 操作数转字符串
+     * 
+     * @param pool 操作数池
+     * 
+     * @return 字符串
+     */
+    std::string LabelOperand::ToString(OperandPool &pool) const {
+        return name;
+    }
+
+//----------------------
+
+    /**
+     * @brief 参数列表操作数构造函数
+     * 
+     * @param name 标号名称
+     */
+    ArgListOperand::ArgListOperand(std::vector<int> argList)
+        : OperandBase(OperandType::ARGLIST), argList(argList)
+    {
+    }
+
+    /**
+     * @brief 获取标号名称
+     * 
+     * @return 标号名称
+     */
+    const std::vector<int> ArgListOperand::GetArgList() {
+        return argList;
+    }
+
+    /**
+     * @brief 操作数转字符串
+     * 
+     * @param pool 操作数池
+     * 
+     * @return 字符串
+     */
+    std::string ArgListOperand::ToString(OperandPool &pool) const {
+        std::stringstream ss;
+        ss << "[";
+        if (argList.size() >= 1) {
+            ss << pool.GetOperand(argList.at(0))->ToString(pool);
+            for (int i = 1 ; i < (int)argList.size() ; i ++) {
+                ss << ", " << pool.GetOperand(argList.at(i))->ToString(pool);
+            }
+        }
+        ss << "]";
+        return ss.str();
+    }
+
+//----------------------
+
+    /**
+     * @brief 操作数池构造函数
+     * 
+     */
+    OperandPool::OperandPool() {
+    }
+
+    /**
+     * @brief 操作数池析构函数
+     * 
+     */
+    OperandPool::~OperandPool() {
+        for (auto op : operands) {
+            delete op;
+        }
+        operands.clear();
+    }
+
+    /**
+     * @brief 获取操作数
+     * 
+     * @param id 操作数ID
+     * @return 操作数
+     */
+    OperandBase *OperandPool::GetOperand(int id) {
+        return operands.at(id);
+    }
+    
+    /**
+     * @brief 追加操作数
+     * 
+     * @param operand 操作数
+     * @return 操作数ID
+     */
+    int OperandPool::AppendOperand(OperandBase *operand) {
+        int id = operands.size();
+        operands.push_back(operand);
+        return id;
     }
 
 //---------------------------------------------------------

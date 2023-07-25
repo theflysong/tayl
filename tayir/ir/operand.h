@@ -26,32 +26,22 @@ namespace tayir {
      */
     enum class OperandType {
         /** 空 */
-        EMPTY = 0,
-        /** SSA值 */
-        SSA_VALUE = 1,
-        /** 符号 */
-        LABEL     = 2,
+        EMPTY     = 0,
         /** 常量 */
-        IMMEDIATE  = 3,
-        /** 类型 */
-        TYPE  = 4
+        IMMEDIATE = 1,
+        /** 符号 */
+        SYMBOL    = 2,
+        /** 标号 */
+        LABEL     = 3,
+        /** 参数列表 */
+        ARGLIST  = 4
     };    
     
     /**
-     * @brief 操作数位置
-     * @see Operand
+     * @brief 操作数池
      * 
      */
-    enum class OperandPos {
-        /** 目的 */
-        DEST = 0,
-        /** 源1 */
-        SRC1 = 1,
-        /** 源2 */
-        SRC2 = 2,
-        /** 源3 */
-        SRC3 = 3
-    };
+    class OperandPool;
 
     /**
      * @brief 操作数基类
@@ -62,16 +52,18 @@ namespace tayir {
     protected:
         /** 操作数类型 */
         const OperandType type;
-        /** 操作数位置 */
-        const OperandPos pos;
     public:
         /**
-         * @brief Operand构造函数
+         * @brief 操作数构造函数
          * 
          * @param type 操作数类型
-         * @param pos 操作数位置
          */
-        OperandBase(const OperandType type, const OperandPos pos);
+        OperandBase(const OperandType type);
+        /**
+         * @brief 操作数析构函数
+         * 
+         */
+        virtual ~OperandBase();
         /**
          * @brief 获取操作数类型
          * 
@@ -79,17 +71,13 @@ namespace tayir {
          */
         const OperandType GetOperandType() const;
         /**
-         * @brief 获取操作数位置
-         * 
-         * @return 操作数位置
-         */
-        const OperandPos GetOperandPos() const;
-        /**
          * @brief 操作数转字符串
+         * 
+         * @param pool 操作数池
          * 
          * @return 字符串
          */
-        virtual std::string ToString() const = 0;
+        virtual std::string ToString(OperandPool &pool) const = 0;
     };
 
     /**
@@ -102,82 +90,16 @@ namespace tayir {
         /**
          * @brief 空操作数构造函数
          * 
-         * @param pos 操作数位置
-         * 
          */
-        EmptyOperand(const OperandPos pos);
+        EmptyOperand();
         /**
          * @brief 操作数转字符串
          * 
-         * @return 字符串
-         */
-        virtual std::string ToString() const override final;
-    };
-
-    /**
-     * @brief 零操作数
-     * @see OperandBase
-     * 
-     */
-    class ZeroOperand : public OperandBase{
-    public:
-        /**
-         * @brief 零操作数构造函数
-         * 
-         * @param pos 操作数位置
-         * 
-         */
-        ZeroOperand(const OperandPos pos);
-        /**
-         * @brief 操作数转字符串
+         * @param pool 操作数池
          * 
          * @return 字符串
          */
-        virtual std::string ToString() const override final;
-    };
-
-    /**
-     * @brief 一操作数
-     * @see OperandBase
-     * 
-     */
-    class OneOperand : public OperandBase{
-    public:
-        /**
-         * @brief 一操作数构造函数
-         * 
-         * @param pos 操作数位置
-         * 
-         */
-        OneOperand(const OperandPos pos);
-        /**
-         * @brief 操作数转字符串
-         * 
-         * @return 字符串
-         */
-        virtual std::string ToString() const override final;
-    };
-    
-    /**
-     * @brief 空指针操作数
-     * @see OperandBase
-     * 
-     */
-    class NullOperand : public OperandBase{
-    public:
-        /**
-         * @brief 空指针操作数构造函数
-         * 
-         * @param pos 操作数位置
-         * 
-         */
-        NullOperand(const OperandPos pos);
-        /**
-         * @brief 操作数转字符串
-         * 
-         * @return 字符串
-         */
-        virtual std::string ToString() const override final;
+        virtual std::string ToString(OperandPool &pool) const override final;
     };
 
     /**
@@ -221,6 +143,7 @@ namespace tayir {
 
     /**
      * @brief 立即数操作数
+     * 
      * @see OperandBase
      * 
      */
@@ -234,12 +157,11 @@ namespace tayir {
         /**
          * @brief 立即数操作数构造函数
          * 
-         * @param pos 操作数位置
          * @param type 立即数类型
          * @param value 立即数值
          * 
          */
-        ImmediateOperand(const OperandPos pos, const imm::itype type, const ImmediateValue value);
+        ImmediateOperand(const imm::itype type, const ImmediateValue value);
         /**
          * @brief 获取立即数值
          * 
@@ -255,9 +177,128 @@ namespace tayir {
         /**
          * @brief 操作数转字符串
          * 
+         * @param pool 操作数池
+         * 
          * @return 字符串
          */
-        virtual std::string ToString() const override final;
+        virtual std::string ToString(OperandPool &pool) const override final;
+    };
+
+    /**
+     * @brief 符号范围
+     * 
+     * @see SymbolOperand
+     * 
+     */
+    enum class SymbolScope {
+        GLOBAL = 0,
+        LOCAL = 1
+    };
+
+    /**
+     * @brief 符号操作数
+     * 
+     * @see OperandBase
+     * 
+     */
+    class SymbolOperand : public OperandBase {
+    protected:
+        /** 符号范围 */
+        SymbolScope scope;
+        /** 符号名称 */
+        std::string name;
+    public:
+        /**
+         * @brief 符号操作数构造函数
+         * 
+         * @param scope 符号范围
+         * @param name 符号名称
+         */
+        SymbolOperand(const SymbolScope scope, std::string name);
+        /**
+         * @brief 获取符号范围
+         * 
+         * @return 符号范围
+         */
+        const SymbolScope GetScope() const;
+        /**
+         * @brief 获取符号名称
+         * 
+         * @return 符号名称
+         */
+        const std::string GetName() const;
+        /**
+         * @brief 操作数转字符串
+         * 
+         * @return 字符串
+         */
+        virtual std::string ToString(OperandPool &pool) const override final;
+    };
+
+    /**
+     * @brief 标号操作数
+     * 
+     * @see OperandBase
+     * 
+     */
+    class LabelOperand : public OperandBase {
+    protected:
+        /**  标号名称 */
+        std::string name;
+    public:
+        /**
+         * @brief 标号操作数构造函数
+         * 
+         * @param name 标号名称
+         */
+        LabelOperand(std::string name);
+        /**
+         * @brief 获取标号名称
+         * 
+         * @return 标号名称
+         */
+        const std::string GetName() const;
+        /**
+         * @brief 操作数转字符串
+         * 
+         * @param pool 操作数池
+         * 
+         * @return 字符串
+         */
+        virtual std::string ToString(OperandPool &pool) const override final;
+    };
+
+    /**
+     * @brief 参数列表操作数
+     * 
+     * @see OperandBase
+     * 
+     */
+    class ArgListOperand : public OperandBase {
+    protected:
+        /**  标号名称 */
+        std::vector<int> argList;
+    public:
+        /**
+         * @brief 参数列表操作数构造函数
+         * 
+         * @param name 标号名称
+         */
+        ArgListOperand(std::vector<int> argList);
+        /**
+         * @brief 获取标号名称
+         * 
+         * @return 标号名称
+         */
+        const std::vector<int> GetArgList();
+        /**
+         * @brief 操作数转字符串
+         * 
+         * @param pool 操作数池
+         * 
+         * @return 字符串
+         */
+        virtual std::string ToString(OperandPool &pool) const override final;
     };
 
     /**
@@ -275,12 +316,17 @@ namespace tayir {
          */
         OperandPool();
         /**
+         * @brief 操作数池析构函数
+         * 
+         */
+        ~OperandPool();
+        /**
          * @brief 获取操作数
          * 
          * @param id 操作数ID
          * @return 操作数
          */
-        OperandBase * GetOperand(int id);
+        OperandBase *GetOperand(int id);
         /**
          * @brief 追加操作数
          * 

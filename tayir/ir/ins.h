@@ -110,6 +110,11 @@ namespace tayir {
          * 
          */
         int src2Op;
+        /**
+         * @brief 操作数3
+         * 
+         */
+        int src3Op;
     public:
         /**
          * @brief Ins构造函数
