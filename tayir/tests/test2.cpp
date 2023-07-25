@@ -9,43 +9,63 @@ void test2() {
 
     //TODO: Const String Pool
     OperandPool opPool;
-    int TypeI32    = opPool.AppendOperand(new SymbolOperand(SymbolScope::BUILTIN, "i32"));
-    int FuncScanf  = opPool.AppendOperand(new SymbolOperand(SymbolScope::GLOBAL,  "scanf"));
-    int FuncPrintf = opPool.AppendOperand(new SymbolOperand(SymbolScope::GLOBAL,  "printf"));
-    int ValAPtr    = opPool.AppendOperand(new SymbolOperand(SymbolScope::LOCAL,   "a$ptr"));
-    int ValBPtr    = opPool.AppendOperand(new SymbolOperand(SymbolScope::LOCAL,   "b$ptr"));
-    int ValAVal    = opPool.AppendOperand(new SymbolOperand(SymbolScope::LOCAL,   "a$val"));
-    int ValBVal    = opPool.AppendOperand(new SymbolOperand(SymbolScope::LOCAL,   "b$val"));
-    int ValTemp0   = opPool.AppendOperand(new SymbolOperand(SymbolScope::LOCAL,   "temp$0"));
-    int ValC       = opPool.AppendOperand(new SymbolOperand(SymbolScope::LOCAL,   "c"));
-    int CS0        = opPool.AppendOperand(new SymbolOperand(SymbolScope::GLOBAL,  "cs$annoymous$0"));
-    int CS1        = opPool.AppendOperand(new SymbolOperand(SymbolScope::GLOBAL,  "cs$annoymous$1"));
+    int FuncFib     = opPool.AppendOperand(new SymbolOperand(SymbolScope::GLOBAL,  "fin"));
 
-    int ArgComp1   = opPool.AppendOperand(new ArgListOperand({CS0, ValAPtr, ValBPtr}));
-    int ArgComp2   = opPool.AppendOperand(new ArgListOperand({CS1, ValC}));
+    int ValN        = opPool.AppendOperand(new SymbolOperand(SymbolScope::LOCAL,   "n"));
+    int ValTmpCond0 = opPool.AppendOperand(new SymbolOperand(SymbolScope::LOCAL,   "tmp$cond$0"));
+    int ValTmpCond1 = opPool.AppendOperand(new SymbolOperand(SymbolScope::LOCAL,   "tmp$cond$1"));
+    int ValTmpRet0  = opPool.AppendOperand(new SymbolOperand(SymbolScope::LOCAL,   "tmp$ret$0"));
+    int ValTmpRet1  = opPool.AppendOperand(new SymbolOperand(SymbolScope::LOCAL,   "tmp$ret$1"));
+    int ValTmpRes0  = opPool.AppendOperand(new SymbolOperand(SymbolScope::LOCAL,   "tmp$res$0"));
+    int ValTmpRes1  = opPool.AppendOperand(new SymbolOperand(SymbolScope::LOCAL,   "tmp$res$1"));
+    int ValTmpRes2  = opPool.AppendOperand(new SymbolOperand(SymbolScope::LOCAL,   "tmp$res$2"));
+    
+    int LabelIf0    = opPool.AppendOperand(new LabelOperand("if0"));
+    int LabelElse0  = opPool.AppendOperand(new LabelOperand("else0"));
+    int LabelElse1  = opPool.AppendOperand(new LabelOperand("else1"));
 
-    int Const1     = opPool.AppendOperand(new ImmediateOperand(imm::itype::I32, ImmediateValue{.i32Val = 2}));
-    int Const2     = opPool.AppendOperand(new ImmediateOperand(imm::itype::I32, ImmediateValue{.i32Val = 0}));
+    int ArgComp1    = opPool.AppendOperand(new ArgListOperand({ValTmpRes0}));
+    int ArgComp2    = opPool.AppendOperand(new ArgListOperand({ValTmpRes1}));
+
+    int Const0      = opPool.AppendOperand(new ImmediateOperand(imm::itype::I32, ImmediateValue{.i32Val = 0}));
+    int Const1      = opPool.AppendOperand(new ImmediateOperand(imm::itype::I32, ImmediateValue{.i32Val = 1}));
+    int Const2      = opPool.AppendOperand(new ImmediateOperand(imm::itype::I32, ImmediateValue{.i32Val = 2}));
 
     IRFunctionBuilder fnBuilder;
-    fnBuilder.GetDecl().name = "main";
+    fnBuilder.GetDecl().name = "fib";
     fnBuilder.GetDecl().conventionId = 0;
     fnBuilder.GetDecl().returnTypeId = man.GetI32Id();
-    fnBuilder.GetDecl().args.push_back(Argument(man.GetI32Id(), "argc"));
-    fnBuilder.GetDecl().args.push_back(Argument(man.GetP64Id(), "argv"));
+    fnBuilder.GetDecl().args.push_back(Argument(man.GetI32Id(), "n"));
 
     fnBuilder.AppendBlock(
         IRBasicBlockBuilder()
-        .AppendIns(Ins(InsType::ALLOC,  ValAPtr, TypeI32))
-        .AppendIns(Ins(InsType::ALLOC,  ValBPtr, TypeI32))
-        .AppendIns(Ins(InsType::CALL,        -1, FuncScanf,  ArgComp1))
-        .AppendIns(Ins(InsType::LOAD,   ValAVal, ValAPtr))
-        .AppendIns(Ins(InsType::LOAD,   ValBVal, ValBPtr))
-        .AppendIns(Ins(InsType::MUL,   ValTemp0, ValBVal,    Const1))
-        .AppendIns(Ins(InsType::ADD,       ValC, ValAVal,    ValTemp0))
-        .AppendIns(Ins(InsType::CALL,        -1, FuncPrintf, ArgComp2))
-        .AppendIns(Ins(InsType::RET,         -1, Const2))
-        .Build("start")
+            .AppendIns(Ins(InsType::EQU, ValTmpCond0, ValN, Const0))
+            .AppendIns(Ins(InsType::BR,  ValTmpCond0, LabelIf0, LabelElse0))
+            .Build("start")
+    );
+
+    fnBuilder.AppendBlock(
+        IRBasicBlockBuilder()
+            .AppendIns(Ins(InsType::EQU, ValTmpCond1, ValN, Const1))
+            .AppendIns(Ins(InsType::BR,  ValTmpCond1, LabelIf0, LabelElse1))
+            .Build("else0")
+    );
+
+    fnBuilder.AppendBlock(
+        IRBasicBlockBuilder()
+            .AppendIns(Ins(InsType::RET,          -1, Const1))
+            .Build("if0")
+    );
+
+    fnBuilder.AppendBlock(
+        IRBasicBlockBuilder()
+            .AppendIns(Ins(InsType::SUB,  ValTmpRes0, ValN, Const1))
+            .AppendIns(Ins(InsType::SUB,  ValTmpRes1, ValN, Const2))
+            .AppendIns(Ins(InsType::CALL, ValTmpRet0, FuncFib, ArgComp1))
+            .AppendIns(Ins(InsType::CALL, ValTmpRet1, FuncFib, ArgComp2))
+            .AppendIns(Ins(InsType::ADD,  ValTmpRes2, ValTmpRet0, ValTmpRet1))
+            .AppendIns(Ins(InsType::RET,          -1, ValTmpRes2))
+            .Build("else1")
     );
 
     IRFunction *func = fnBuilder.Build();

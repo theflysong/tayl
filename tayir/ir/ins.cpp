@@ -36,6 +36,8 @@ namespace tayir {
         case InsType::STORE: return "store";
         case InsType::BR:    return "br";
         case InsType::GOTO:  return "goto";
+        case InsType::EQU:    return "equ";
+        case InsType::NEQ:    return "neq";
         case InsType::GT:    return "gt";
         case InsType::LT:    return "lt";
         case InsType::GTE:   return "gte";

@@ -1,0 +1,30 @@
+import std
+
+/*
+
+int fib(int n) {
+    if (n == 0 || n == 1) {
+        return 1;
+    }
+    return fib(n - 1) + fib(n - 2);
+}
+
+*/
+
+def @fib(i32 %n) -> i32 {
+start:
+    %tmp$cond$0 = equ %n, 0
+    br %tmp$cond$0, if0, else0
+else0:
+    %tmp$cond$1 = equ %n, 1
+    br %tmp$cond$1, if0, else1
+if0:
+    ret 1
+else1:
+    %tmp$res$0 = sub %n, 1
+    %tmp$res$1 = sub %n, 2
+    %tmp$ret$0 = call @fin, [%tmp$res$0]
+    %tmp$ret$1 = call @fin, [%tmp$res$1]
+    %tmp$res$2 = add %tmp$ret$0, %tmp$ret$1
+    ret %tmp$res$2
+}

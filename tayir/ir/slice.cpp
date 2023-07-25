@@ -229,7 +229,7 @@ namespace tayir {
         if (argNum != 0) {
             outs << "(";
             Argument firstArg = args[0];
-            outs << man.GetType(firstArg.GetTypeId())->GetName() << " " << firstArg.GetName();
+            outs << man.GetType(firstArg.GetTypeId())->GetName() << " %" << firstArg.GetName();
             for (int i = 1 ; i < argNum ; i ++) {
                 outs << ", " << man.GetType(args[i].GetTypeId())->GetName() << " %" << args[i].GetName();
             }
@@ -328,7 +328,7 @@ namespace tayir {
         outs << "def @" << name << "(";
         if (args.size() != 0) {
             Argument firstArg = args.at(0);
-            outs << man.GetType(firstArg.GetTypeId())->GetName() << " " << firstArg.GetName();
+            outs << man.GetType(firstArg.GetTypeId())->GetName() << " %" << firstArg.GetName();
             for (int i = 1 ; i < (int)args.size() ; i ++) {
                 outs << ", " << man.GetType(args.at(i).GetTypeId())->GetName() << " %" << args.at(i).GetName();
             }
