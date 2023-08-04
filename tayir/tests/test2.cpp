@@ -9,7 +9,7 @@ void test2() {
 
     //TODO: Const String Pool
     OperandPool opPool;
-    int FuncFib     = opPool.AppendOperand(new SymbolOperand(SymbolScope::GLOBAL,  "fin"));
+    int FuncFib     = opPool.AppendOperand(new SymbolOperand(SymbolScope::GLOBAL,  "fib"));
 
     int ValN        = opPool.AppendOperand(new SymbolOperand(SymbolScope::LOCAL,   "n"));
     int ValTmpCond0 = opPool.AppendOperand(new SymbolOperand(SymbolScope::LOCAL,   "tmp$cond$0"));
